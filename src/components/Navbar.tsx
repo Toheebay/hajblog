@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,10 +9,12 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { MessageCircle, ShoppingCart } from 'lucide-react';
+import { MessageCircle, ShoppingCart, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { AuthModal } from './AuthModal';
 
 const Navbar: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // For demo, we'll assume user is logged in
+  const { user, logout } = useAuth();
   
   return (
     <nav className="bg-white border-b border-gray-200 fixed w-full z-50">
@@ -25,18 +27,23 @@ const Navbar: React.FC = () => {
         <div className="flex items-center space-x-4">
           <Link to="/messages" className="relative">
             <MessageCircle className="h-6 w-6 text-gray-600 hover:text-marketplace-primary transition-colors" />
-            <span className="absolute -top-1 -right-1 bg-marketplace-accent text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">2</span>
+            {user && (
+              <span className="absolute -top-1 -right-1 bg-marketplace-accent text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">2</span>
+            )}
           </Link>
           
-          {isLoggedIn ? (
+          {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer h-8 w-8">
-                  <AvatarImage src="https://i.pravatar.cc/150?img=12" />
-                  <AvatarFallback>MC</AvatarFallback>
+                  <AvatarImage src={`https://i.pravatar.cc/150?u=${user.username}`} />
+                  <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem>
+                  <div className="w-full font-medium">{user.username}</div>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/profile" className="w-full">My Profile</Link>
                 </DropdownMenuItem>
@@ -46,17 +53,18 @@ const Navbar: React.FC = () => {
                 <DropdownMenuItem>
                   <Link to="/messages" className="w-full">Messages</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <button onClick={() => setIsLoggedIn(false)} className="w-full text-left">
+                <DropdownMenuItem onClick={logout}>
+                  <div className="flex items-center w-full text-left">
+                    <LogOut className="mr-2 h-4 w-4" />
                     Log Out
-                  </button>
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center space-x-2">
-              <Button variant="outline" onClick={() => setIsLoggedIn(true)}>Log In</Button>
-              <Button onClick={() => setIsLoggedIn(true)}>Sign Up</Button>
+              <AuthModal variant="outline" triggerText="Log In" />
+              <AuthModal triggerText="Sign Up" />
             </div>
           )}
         </div>
