@@ -10,6 +10,7 @@ import ItemDetail from "./pages/ItemDetail";
 import Chat from "./pages/Chat";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
+import CreateListing from "./pages/CreateListing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/chat/:userId" element={<Chat />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/create-listing" element={<CreateListing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
