@@ -11,6 +11,7 @@ import Chat from "./pages/Chat";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
+import MyListings from "./pages/MyListings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/messages" element={<Messages />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-listing" element={<CreateListing />} />
+            <Route path="/my-listings" element={<MyListings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

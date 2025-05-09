@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { items } from '@/data/items';
 
 // Define user type
 export interface User {
