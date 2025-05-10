@@ -56,9 +56,8 @@ const EditBlogPost: React.FC = () => {
   }, [post, form]);
 
   const mutation = useMutation({
-    mutationFn: (values: BlogPostFormValues & { id: string }) => {
-      const { id, ...postData } = values;
-      return updateBlogPost(id, postData);
+    mutationFn: (values: { id: string, title: string, content: string, image?: string, tags?: string[] }) => {
+      return updateBlogPost(id || '', values);
     },
     onSuccess: () => {
       toast.success("Blog post updated successfully!");
@@ -80,14 +79,15 @@ const EditBlogPost: React.FC = () => {
       return;
     }
 
-    const tagsArray = values.tags ? values.tags.split(',').map(tag => tag.trim()) : [];
+    // Convert comma-separated tags string to array before submitting
+    const tagsArray = values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : undefined;
 
     mutation.mutate({
       id: id || '',
       title: values.title,
       content: values.content,
       image: values.image || undefined,
-      tags: tagsArray.length > 0 ? tagsArray : undefined
+      tags: tagsArray
     });
   };
 

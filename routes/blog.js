@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
     author: req.body.author,
     authorName: req.body.authorName,
     image: req.body.image,
-    tags: req.body.tags
+    tags: Array.isArray(req.body.tags) ? req.body.tags : []
   });
 
   try {
@@ -52,7 +52,7 @@ router.patch('/:id', async (req, res) => {
     if (req.body.title) post.title = req.body.title;
     if (req.body.content) post.content = req.body.content;
     if (req.body.image) post.image = req.body.image;
-    if (req.body.tags) post.tags = req.body.tags;
+    if (req.body.tags) post.tags = Array.isArray(req.body.tags) ? req.body.tags : [];
     post.updatedAt = Date.now();
     
     const updatedPost = await post.save();
