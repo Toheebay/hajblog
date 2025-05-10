@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -43,6 +42,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Adding marketplace green theme colors */
+    --marketplace-green: 78 100% 18%;
+    --marketplace-yellow: 40 100% 50%;
   }
 
   .dark {
@@ -130,5 +133,14 @@
   /* Responsive text sizing */
   .responsive-heading {
     @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+
+  /* Green theme classes */
+  .bg-marketplace-green {
+    @apply bg-[#2B5E0E];
+  }
+  
+  .text-marketplace-yellow {
+    @apply text-[#F2B705];
   }
 }
