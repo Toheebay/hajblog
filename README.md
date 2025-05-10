@@ -1,73 +1,70 @@
-# Welcome to your Lovable project
 
-## Project info
+# MarketChat App
 
-**URL**: https://lovable.dev/projects/9e2a4805-3c4d-41fb-99b1-8109b5fa1fc8
+A marketplace application with real-time chat, blog system, and donation features.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Buy and sell items in a local marketplace
+- Chat directly with sellers
+- Blog system for community content
+- Donation system to support the platform
+- MongoDB database integration
 
-**Use Lovable**
+## Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9e2a4805-3c4d-41fb-99b1-8109b5fa1fc8) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (v14 or higher)
+- MongoDB Atlas account or local MongoDB installation
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone the repository
+2. Install frontend dependencies:
+```
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Set up MongoDB:
+   - Create a MongoDB cluster (Atlas or local)
+   - Update the connection string in the `.env` file
 
-Follow these steps:
+4. Start the backend server:
+```
+node server.js
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+5. Start the frontend:
+```
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Create a `.env` file in the root directory with the following:
 
-**Use GitHub Codespaces**
+```
+MONGODB_URI=your_mongodb_connection_string
+PORT=5000
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+- `/src` - React frontend code
+  - `/components` - UI components
+  - `/contexts` - React contexts
+  - `/data` - Sample data
+  - `/pages` - Application pages
+  - `/services` - API service functions
+- `/models` - MongoDB schemas
+- `/routes` - API routes
+- `server.js` - Express server
 
-This project is built with:
+## Technologies Used
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/9e2a4805-3c4d-41fb-99b1-8109b5fa1fc8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- React (Frontend)
+- Express (Backend)
+- MongoDB (Database)
+- Tailwind CSS (Styling)
+- Tanstack Query (Data Fetching)

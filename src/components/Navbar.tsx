@@ -9,7 +9,7 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { MessageCircle, ShoppingCart, LogOut } from 'lucide-react';
+import { MessageCircle, ShoppingCart, LogOut, BookOpen, Heart } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from './AuthModal';
 
@@ -23,6 +23,24 @@ const Navbar: React.FC = () => {
           <ShoppingCart className="h-6 w-6 text-marketplace-primary" />
           <span className="text-xl font-bold text-marketplace-primary">MarketChat</span>
         </Link>
+        
+        <div className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-gray-600 hover:text-marketplace-primary transition-colors">
+            Home
+          </Link>
+          <Link to="/blog" className="text-gray-600 hover:text-marketplace-primary transition-colors">
+            <div className="flex items-center">
+              <BookOpen className="h-4 w-4 mr-1" />
+              Blog
+            </div>
+          </Link>
+          <Link to="/donate" className="text-gray-600 hover:text-marketplace-primary transition-colors">
+            <div className="flex items-center">
+              <Heart className="h-4 w-4 mr-1" />
+              Donate
+            </div>
+          </Link>
+        </div>
         
         <div className="flex items-center space-x-4">
           <Link to="/messages" className="relative">
@@ -52,6 +70,9 @@ const Navbar: React.FC = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/messages" className="w-full">Messages</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/blog/create" className="w-full">Create Blog Post</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
                   <div className="flex items-center w-full text-left">

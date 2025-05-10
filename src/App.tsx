@@ -13,6 +13,10 @@ import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
 import MyListings from "./pages/MyListings";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import CreateBlogPost from "./pages/CreateBlogPost";
+import Donate from "./pages/Donate";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +35,11 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-listing" element={<CreateListing />} />
             <Route path="/my-listings" element={<MyListings />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/blog/create" element={<CreateBlogPost />} />
+            <Route path="/blog/edit/:id" element={<BlogPost />} />
+            <Route path="/donate" element={<Donate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
