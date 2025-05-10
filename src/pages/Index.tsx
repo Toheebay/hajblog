@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
-import SearchBar from '@/components/SearchBar';
+import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
 import ItemCard from '@/components/ItemCard';
 import { items } from '@/data/items';
@@ -37,20 +37,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      <Header />
       
-      <div className="marketplace-container pt-24 pb-10">
-        <div className="flex flex-col items-center justify-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Buy, Sell, and Chat <span className="text-marketplace-primary">Directly</span>
-          </h1>
-          <p className="text-gray-600 text-center max-w-2xl mb-8">
-            Find amazing items in your area and chat instantly with sellers. 
-            No middleman, just smooth transactions.
-          </p>
-          
-          <SearchBar onSearch={setSearchQuery} />
-        </div>
-        
+      <div className="marketplace-container py-10">
         <CategoryFilter 
           selectedCategory={selectedCategory} 
           onSelectCategory={setSelectedCategory} 
