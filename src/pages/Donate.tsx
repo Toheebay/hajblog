@@ -31,7 +31,7 @@ const Donate: React.FC = () => {
     resolver: zodResolver(donationSchema),
     defaultValues: {
       name: user ? user.username : "",
-      email: user ? user.email : "",
+      email: "", // Updated to default to empty since User type doesn't have email property
       amount: 10,
       message: ""
     },
