@@ -1,37 +1,48 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { marked } from 'marked';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
-import { getBlogPost, deleteBlogPost } from '@/services/blogService';
+import { getBlogPost, deleteBlogPost, updateBlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   
   const { data: post, isLoading, error } = useQuery({
     queryKey: ['blogPost', id],
-    queryFn: () => getBlogPost(id || '')
+    queryFn: () => getBlogPost(id || ''),
+    enabled: !!id
+  });
+  
+  const deleteMutation = useMutation({
+    mutationFn: deleteBlogPost,
+    onSuccess: () => {
+      toast.success('Blog post deleted successfully');
+      navigate('/blog');
+    },
+    onError: () => {
+      toast.error('Failed to delete blog post');
+    }
   });
   
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
-      try {
-        await deleteBlogPost(id || '');
-        toast.success('Blog post deleted successfully');
-        navigate('/blog');
-      } catch (error) {
-        toast.error('Failed to delete blog post');
-      }
+      deleteMutation.mutate(id || '');
     }
+  };
+  
+  const handleEdit = () => {
+    navigate(`/blog/edit/${id}`);
   };
   
   if (isLoading) {
@@ -66,6 +77,11 @@ const BlogPost = () => {
       <Navbar />
       
       <div className="marketplace-container py-24">
+        <Link to="/blog" className="inline-flex items-center mb-6 text-gray-600 hover:text-gray-900">
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back to blog
+        </Link>
+        
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           {post.image && (
             <div className="h-64 md:h-96 overflow-hidden">
@@ -90,12 +106,15 @@ const BlogPost = () => {
               
               {isAuthor && (
                 <div className="flex space-x-2">
-                  <Link to={`/blog/edit/${post.id}`}>
-                    <Button variant="outline" size="sm" className="flex items-center">
-                      <Edit className="h-4 w-4 mr-1" />
-                      Edit
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex items-center"
+                    onClick={handleEdit}
+                  >
+                    <Edit className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
                   <Button 
                     variant="outline" 
                     size="sm"
@@ -129,12 +148,6 @@ const BlogPost = () => {
               </div>
             )}
           </div>
-        </div>
-        
-        <div className="mt-8 text-center">
-          <Link to="/blog">
-            <Button variant="outline">Back to Blog</Button>
-          </Link>
         </div>
       </div>
     </div>

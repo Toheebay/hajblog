@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import CreateBlogPost from "./pages/CreateBlogPost";
+import EditBlogPost from "./pages/EditBlogPost";
 import Donate from "./pages/Donate";
 
 const queryClient = new QueryClient();
@@ -38,7 +39,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/blog/create" element={<CreateBlogPost />} />
-            <Route path="/blog/edit/:id" element={<BlogPost />} />
+            <Route path="/blog/edit/:id" element={<EditBlogPost />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
