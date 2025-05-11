@@ -9,12 +9,43 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { MessageCircle, ShoppingCart, LogOut, BookOpen, Heart } from 'lucide-react';
+import { MessageCircle, ShoppingCart, LogOut, Users, Heart, Menu, GraduationCap, Award, UserRound } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from './AuthModal';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
+  const isMobile = useIsMobile();
+  
+  const navItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Community', path: '/community', icon: <Users className="h-4 w-4 mr-1" /> },
+    { label: 'Courses', path: '/courses', icon: <GraduationCap className="h-4 w-4 mr-1" /> },
+    { label: 'Certifications', path: '/certifications', icon: <Award className="h-4 w-4 mr-1" /> },
+    { label: 'Mentorship', path: '/mentorship', icon: <UserRound className="h-4 w-4 mr-1" /> },
+    { label: 'Donate', path: '/donate', icon: <Heart className="h-4 w-4 mr-1" /> },
+  ];
+
+  const renderNavLinks = () => (
+    <>
+      {navItems.map((item) => (
+        <Link 
+          key={item.path} 
+          to={item.path} 
+          className="text-gray-600 hover:text-marketplace-primary transition-colors flex items-center"
+        >
+          {item.icon}
+          {item.label}
+        </Link>
+      ))}
+    </>
+  );
   
   return (
     <nav className="bg-white border-b border-gray-200 fixed w-full z-50">
@@ -24,22 +55,9 @@ const Navbar: React.FC = () => {
           <span className="text-xl font-bold text-marketplace-primary">MarketChat</span>
         </Link>
         
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="text-gray-600 hover:text-marketplace-primary transition-colors">
-            Home
-          </Link>
-          <Link to="/blog" className="text-gray-600 hover:text-marketplace-primary transition-colors">
-            <div className="flex items-center">
-              <BookOpen className="h-4 w-4 mr-1" />
-              Blog
-            </div>
-          </Link>
-          <Link to="/donate" className="text-gray-600 hover:text-marketplace-primary transition-colors">
-            <div className="flex items-center">
-              <Heart className="h-4 w-4 mr-1" />
-              Donate
-            </div>
-          </Link>
+          {renderNavLinks()}
         </div>
         
         <div className="flex items-center space-x-4">
@@ -72,7 +90,7 @@ const Navbar: React.FC = () => {
                   <Link to="/messages" className="w-full">Messages</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/blog/create" className="w-full">Create Blog Post</Link>
+                  <Link to="/community/create" className="w-full">Create Post</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
                   <div className="flex items-center w-full text-left">
@@ -87,6 +105,22 @@ const Navbar: React.FC = () => {
               <AuthModal variant="outline" triggerText="Log In" />
               <AuthModal triggerText="Sign Up" />
             </div>
+          )}
+          
+          {/* Mobile Menu Button */}
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <div className="flex flex-col space-y-4 mt-8">
+                  {renderNavLinks()}
+                </div>
+              </SheetContent>
+            </Sheet>
           )}
         </div>
       </div>
