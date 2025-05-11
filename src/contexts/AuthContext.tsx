@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from "sonner";
 import { items } from '@/data/items';
@@ -6,7 +7,8 @@ import { items } from '@/data/items';
 export interface User {
   id: string;
   username: string;
-  email?: string; // Added email property as optional
+  email?: string;
+  isAdmin?: boolean;
 }
 
 // Define the context type
@@ -25,7 +27,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const USER_STORAGE_KEY = 'marketChat_user';
 
 // Mock user database (in a real app, this would be in a backend)
-const MOCK_USERS: Record<string, { username: string; password: string }> = {};
+const MOCK_USERS: Record<string, { username: string; password: string; isAdmin?: boolean }> = {
+  "Adebayo": { username: "Adebayo", password: "toheeb1", isAdmin: true }
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -63,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userId = `user_${Date.now()}`;
     MOCK_USERS[username] = { username, password };
     
-    const newUser = { id: userId, username, email: `${username}@example.com` }; // Added email
+    const newUser = { id: userId, username, email: `${username}@example.com` };
     setUser(newUser);
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
     toast.success("Account created successfully");
@@ -85,7 +89,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error("Invalid username or password");
     }
 
-    const loggedInUser = { id: `user_${Date.now()}`, username, email: `${username}@example.com` }; // Added email
+    const loggedInUser = { 
+      id: `user_${Date.now()}`, 
+      username, 
+      email: `${username}@example.com`,
+      isAdmin: userRecord.isAdmin || false
+    };
+    
     setUser(loggedInUser);
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(loggedInUser));
     toast.success("Logged in successfully");

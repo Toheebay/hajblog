@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { categories } from '@/data/items';
 import Navbar from '@/components/Navbar';
+import { ImagePlus, X, Plus, VideoIcon } from 'lucide-react';
 
 const itemSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters" }),
@@ -20,14 +21,22 @@ const itemSchema = z.object({
   description: z.string().min(10, { message: "Description must be at least 10 characters" }),
   category: z.string().min(1, { message: "Please select a category" }),
   location: z.string().min(3, { message: "Location must be at least 3 characters" }),
-  image: z.string().url({ message: "Please enter a valid image URL" }).or(z.string().length(0)),
+  // We'll handle media separately
 });
 
 type ItemFormValues = z.infer<typeof itemSchema>;
 
+interface MediaItem {
+  type: 'image' | 'video';
+  url: string;
+}
+
 const CreateListing: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [newMediaUrl, setNewMediaUrl] = useState('');
+  const [newMediaType, setNewMediaType] = useState<'image' | 'video'>('image');
 
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(itemSchema),
@@ -37,13 +46,17 @@ const CreateListing: React.FC = () => {
       description: "",
       category: "",
       location: "",
-      image: "",
     },
   });
 
   const onSubmit = (values: ItemFormValues) => {
     if (!user) {
       toast.error("You must be logged in to create a listing");
+      return;
+    }
+
+    if (media.length === 0) {
+      toast.error("Please add at least one image or video");
       return;
     }
 
@@ -58,10 +71,29 @@ const CreateListing: React.FC = () => {
         avatar: `https://i.pravatar.cc/150?u=${user.username}`,
       },
       createdAt: new Date().toISOString(),
+      media: media,
+      image: media.find(m => m.type === 'image')?.url || '',
     });
     
     // In a real app, we would save to a database here
     navigate('/');
+  };
+
+  const handleAddMedia = () => {
+    if (!newMediaUrl) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+
+    setMedia([...media, { type: newMediaType, url: newMediaUrl }]);
+    setNewMediaUrl('');
+    setNewMediaType('image');
+  };
+
+  const handleRemoveMedia = (index: number) => {
+    const newMedia = [...media];
+    newMedia.splice(index, 1);
+    setMedia(newMedia);
   };
 
   if (!user) {
@@ -173,22 +205,71 @@ const CreateListing: React.FC = () => {
                 )}
               />
               
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URL (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://example.com/image.jpg" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Provide a URL to an image of your item
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+              {/* Media upload section */}
+              <div>
+                <FormLabel className="block mb-2">Images & Videos</FormLabel>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex gap-2">
+                    <Select 
+                      value={newMediaType}
+                      onValueChange={(value) => setNewMediaType(value as 'image' | 'video')}
+                    >
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="image">Image</SelectItem>
+                        <SelectItem value="video">Video</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    
+                    <Input 
+                      placeholder={`Enter ${newMediaType} URL`}
+                      value={newMediaUrl}
+                      onChange={(e) => setNewMediaUrl(e.target.value)}
+                      className="flex-1"
+                    />
+                    
+                    <Button type="button" onClick={handleAddMedia} size="icon">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <FormDescription>
+                    Add multiple images and videos to showcase your item
+                  </FormDescription>
+                </div>
+                
+                {media.length > 0 && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4">
+                    {media.map((item, index) => (
+                      <div key={index} className="relative group border rounded-md overflow-hidden aspect-square">
+                        {item.type === 'image' ? (
+                          <img 
+                            src={item.url} 
+                            alt={`Media ${index}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                            <VideoIcon className="h-10 w-10 text-gray-400" />
+                          </div>
+                        )}
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="destructive"
+                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                          onClick={() => handleRemoveMedia(index)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 )}
-              />
+              </div>
               
               <Button type="submit" className="w-full bg-marketplace-primary">
                 Create Listing

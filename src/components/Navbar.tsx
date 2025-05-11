@@ -1,130 +1,193 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
-import { MessageCircle, ShoppingCart, LogOut, Users, Heart, Menu, GraduationCap, Award, UserRound } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { AuthModal } from './AuthModal';
-import { useIsMobile } from '@/hooks/use-mobile';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Menu, X } from 'lucide-react';
+import AuthModal from '@/components/AuthModal';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
-  const isMobile = useIsMobile();
-  
-  const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Community', path: '/community', icon: <Users className="h-4 w-4 mr-1" /> },
-    { label: 'Courses', path: '/courses', icon: <GraduationCap className="h-4 w-4 mr-1" /> },
-    { label: 'Certifications', path: '/certifications', icon: <Award className="h-4 w-4 mr-1" /> },
-    { label: 'Mentorship', path: '/mentorship', icon: <UserRound className="h-4 w-4 mr-1" /> },
-    { label: 'Donate', path: '/donate', icon: <Heart className="h-4 w-4 mr-1" /> },
-  ];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { user } = useAuth();
+  const { currencySymbol } = useCurrency();
+  const location = useLocation();
 
-  const renderNavLinks = () => (
-    <>
-      {navItems.map((item) => (
-        <Link 
-          key={item.path} 
-          to={item.path} 
-          className="text-gray-600 hover:text-marketplace-primary transition-colors flex items-center"
-        >
-          {item.icon}
-          {item.label}
-        </Link>
-      ))}
-    </>
-  );
-  
+  const isActive = (path: string) => location.pathname === path;
+
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
-    <nav className="bg-white border-b border-gray-200 fixed w-full z-50">
-      <div className="marketplace-container flex justify-between items-center py-4">
-        <Link to="/" className="flex items-center space-x-2">
-          <ShoppingCart className="h-6 w-6 text-marketplace-primary" />
-          <span className="text-xl font-bold text-marketplace-primary">MarketChat</span>
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
-          {renderNavLinks()}
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <Link to="/messages" className="relative">
-            <MessageCircle className="h-6 w-6 text-gray-600 hover:text-marketplace-primary transition-colors" />
-            {user && (
-              <span className="absolute -top-1 -right-1 bg-marketplace-accent text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">2</span>
-            )}
-          </Link>
-          
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="cursor-pointer h-8 w-8">
-                  <AvatarImage src={`https://i.pravatar.cc/150?u=${user.username}`} />
-                  <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>
-                  <div className="w-full font-medium">{user.username}</div>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/profile" className="w-full">My Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/my-listings" className="w-full">My Listings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/messages" className="w-full">Messages</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/community/create" className="w-full">Create Post</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={logout}>
-                  <div className="flex items-center w-full text-left">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Log Out
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="flex items-center space-x-2">
-              <AuthModal variant="outline" triggerText="Log In" />
-              <AuthModal triggerText="Sign Up" />
+    <>
+      <header className="relative z-10 bg-marketplace-primary text-white">
+        <div className="marketplace-container">
+          <nav className="flex items-center justify-between py-4">
+            {/* Logo */}
+            <Link to="/" className="text-xl font-bold">
+              Market<span className="text-marketplace-accent">Chat</span> {currencySymbol}
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link
+                to="/"
+                className={`hover:text-marketplace-accent ${isActive('/') ? 'text-marketplace-accent' : ''}`}
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/courses"
+                className={`hover:text-marketplace-accent ${isActive('/courses') ? 'text-marketplace-accent' : ''}`}
+              >
+                Courses
+              </Link>
+              <Link
+                to="/certifications"
+                className={`hover:text-marketplace-accent ${isActive('/certifications') ? 'text-marketplace-accent' : ''}`}
+              >
+                Certifications
+              </Link>
+              <Link
+                to="/mentorship"
+                className={`hover:text-marketplace-accent ${isActive('/mentorship') ? 'text-marketplace-accent' : ''}`}
+              >
+                Mentorship
+              </Link>
+              <Link
+                to="/community"
+                className={`hover:text-marketplace-accent ${isActive('/community') ? 'text-marketplace-accent' : ''}`}
+              >
+                Community
+              </Link>
+              <Link
+                to="/donate"
+                className={`hover:text-marketplace-accent ${isActive('/donate') ? 'text-marketplace-accent' : ''}`}
+              >
+                Donate
+              </Link>
+              
+              {user?.isAdmin && (
+                <Link
+                  to="/admin/courses"
+                  className="hover:text-marketplace-accent text-yellow-300"
+                >
+                  Admin
+                </Link>
+              )}
             </div>
-          )}
-          
-          {/* Mobile Menu Button */}
-          {isMobile && (
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <div className="flex flex-col space-y-4 mt-8">
-                  {renderNavLinks()}
+
+            {/* Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <Link to="/messages">
+                    <Button variant="ghost" className="hover:bg-marketplace-dark">
+                      Messages
+                    </Button>
+                  </Link>
+                  <Link to="/create-listing">
+                    <Button className="bg-marketplace-accent hover:bg-marketplace-accent/90">
+                      Create Listing
+                    </Button>
+                  </Link>
+                  <Link to="/profile">
+                    <Button variant="outline" className="border-white text-white hover:bg-marketplace-dark">
+                      My Profile
+                    </Button>
+                  </Link>
                 </div>
-              </SheetContent>
-            </Sheet>
-          )}
+              ) : (
+                <Button onClick={() => setIsAuthModalOpen(true)} className="bg-marketplace-accent hover:bg-marketplace-accent/90">
+                  Sign In
+                </Button>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </nav>
         </div>
-      </div>
-    </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-marketplace-primary pt-16 px-4 pb-4">
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col space-y-4 py-8">
+              <Link to="/" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Marketplace
+              </Link>
+              <Link to="/courses" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Courses
+              </Link>
+              <Link to="/certifications" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Certifications
+              </Link>
+              <Link to="/mentorship" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Mentorship
+              </Link>
+              <Link to="/community" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Community
+              </Link>
+              <Link to="/donate" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Donate
+              </Link>
+              
+              {user?.isAdmin && (
+                <Link to="/admin/courses" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded text-yellow-300">
+                  Admin
+                </Link>
+              )}
+            </div>
+
+            <div className="border-t border-marketplace-dark pt-4 space-y-2">
+              {user ? (
+                <>
+                  <Link to="/messages" onClick={closeMenu} className="block">
+                    <Button variant="ghost" className="w-full justify-start hover:bg-marketplace-dark">
+                      Messages
+                    </Button>
+                  </Link>
+                  <Link to="/create-listing" onClick={closeMenu} className="block">
+                    <Button className="w-full justify-start bg-marketplace-accent hover:bg-marketplace-accent/90">
+                      Create Listing
+                    </Button>
+                  </Link>
+                  <Link to="/profile" onClick={closeMenu} className="block">
+                    <Button variant="outline" className="w-full justify-start border-white text-white hover:bg-marketplace-dark">
+                      My Profile
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <Button
+                  onClick={() => {
+                    closeMenu();
+                    setIsAuthModalOpen(true);
+                  }}
+                  className="w-full bg-marketplace-accent hover:bg-marketplace-accent/90"
+                >
+                  Sign In
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+    </>
   );
 };
 

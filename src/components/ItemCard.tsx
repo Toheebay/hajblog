@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Item } from '@/data/items';
 import { formatDistanceToNow } from 'date-fns';
 import { MessageCircle } from 'lucide-react';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface ItemCardProps {
   item: Item;
@@ -13,6 +14,7 @@ interface ItemCardProps {
 
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   const timeAgo = formatDistanceToNow(new Date(item.createdAt), { addSuffix: true });
+  const { formatPrice } = useCurrency();
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
@@ -24,7 +26,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
             className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
           />
           <div className="absolute top-0 right-0 m-2 bg-marketplace-accent text-white px-2 py-1 rounded-md text-sm font-medium">
-            {item.price === 0 ? "FREE" : `$${item.price}`}
+            {item.price === 0 ? "FREE" : formatPrice(item.price)}
           </div>
         </div>
         
