@@ -5,6 +5,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, Play } from 'lucide-react';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { CurrencyProvider } from '@/contexts/CurrencyContext';
 
 // Dummy data for courses
 const courses = [
@@ -110,7 +112,11 @@ const CourseCard = ({ course }: { course: typeof courses[0] }) => {
 const Courses = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+      <AuthProvider>
+        <CurrencyProvider>
+          <Navbar />
+        </CurrencyProvider>
+      </AuthProvider>
       
       <div className="marketplace-container py-12 md:py-24">
         <div className="flex items-center gap-3 mb-8">

@@ -10,9 +10,25 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const { user } = useAuth();
-  const { currencySymbol } = useCurrency();
   const location = useLocation();
+  
+  // Make safe hooks to prevent errors when context is not available
+  let user = null;
+  let currencySymbol = '$';
+  
+  try {
+    const auth = useAuth();
+    user = auth.user;
+  } catch (error) {
+    console.log('Auth context not available');
+  }
+  
+  try {
+    const currency = useCurrency();
+    currencySymbol = currency.currencySymbol;
+  } catch (error) {
+    console.log('Currency context not available');
+  }
 
   const isActive = (path: string) => location.pathname === path;
 

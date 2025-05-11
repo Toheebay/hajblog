@@ -4,20 +4,16 @@ import { AuthTabs } from './AuthForms';
 import {
   Dialog,
   DialogContent,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button, ButtonProps } from '@/components/ui/button';
 
-interface AuthModalProps extends ButtonProps {
-  triggerText: string;
+interface AuthModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ triggerText, ...buttonProps }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button {...buttonProps}>{triggerText}</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <AuthTabs />
       </DialogContent>
