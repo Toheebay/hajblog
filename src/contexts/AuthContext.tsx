@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from "sonner";
-import { items } from '@/data/items';
 
 // Define user type
 export interface User {
@@ -18,6 +17,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  recoverPassword: (username: string) => Promise<void>;
 }
 
 // Create the context
@@ -102,6 +102,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return Promise.resolve();
   };
 
+  // Password recovery function
+  const recoverPassword = async (username: string): Promise<void> => {
+    const userRecord = MOCK_USERS[username];
+    if (!userRecord) {
+      toast.error("User not found");
+      throw new Error("User not found");
+    }
+
+    // In a real app, this would send an email
+    toast.success(`If ${username} exists in our system, we've sent recovery instructions to their email`);
+    console.log(`Recovery for: ${username}, password: ${userRecord.password}`);
+    return Promise.resolve();
+  };
+
   // Logout user
   const logout = () => {
     setUser(null);
@@ -110,7 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, recoverPassword }}>
       {children}
     </AuthContext.Provider>
   );

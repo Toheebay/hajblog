@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 // Login form schema
 const loginSchema = z.object({
@@ -32,17 +33,29 @@ const registerSchema = z.object({
   path: ["confirmPassword"],
 });
 
+// Forgot password schema
+const forgotPasswordSchema = z.object({
+  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
+});
+
 // Types for the form data
 type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
+type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 const LoginForm: React.FC = () => {
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { username: "", password: "" },
+  });
+
+  const forgotPasswordForm = useForm<ForgotPasswordValues>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { username: "" },
   });
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -56,6 +69,51 @@ const LoginForm: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const handleForgotPassword = async (values: ForgotPasswordValues) => {
+    try {
+      // In this mock implementation, we'll just show a toast
+      toast.success(`Recovery email sent to ${values.username}@example.com`);
+      setShowForgotPassword(false);
+    } catch (error) {
+      toast.error("Failed to process password recovery request");
+    }
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Recover Password</h3>
+        <p className="text-sm text-gray-500">Enter your username and we'll send you recovery instructions.</p>
+        
+        <Form {...forgotPasswordForm}>
+          <form onSubmit={forgotPasswordForm.handleSubmit(handleForgotPassword)} className="space-y-4">
+            <FormField
+              control={forgotPasswordForm.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your username" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex space-x-2">
+              <Button type="button" variant="outline" className="w-1/2" onClick={() => setShowForgotPassword(false)}>
+                Back to Login
+              </Button>
+              <Button type="submit" className="w-1/2 bg-marketplace-primary">
+                Recover Password
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -83,10 +141,19 @@ const LoginForm: React.FC = () => {
                 <Input type="password" placeholder="Enter your password" {...field} />
               </FormControl>
               <FormMessage />
+              <div className="text-right">
+                <button 
+                  type="button" 
+                  onClick={() => setShowForgotPassword(true)} 
+                  className="text-sm text-marketplace-primary hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full bg-marketplace-primary" disabled={isLoading}>
           {isLoading ? "Logging in..." : "Log In"}
         </Button>
       </form>

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -142,5 +143,34 @@
   
   .text-marketplace-yellow {
     @apply text-[#F2B705];
+  }
+  
+  /* Soft Gradient backgrounds */
+  .soft-blue-gradient {
+    @apply bg-gradient-to-br from-blue-50 to-indigo-100;
+  }
+  
+  .soft-green-gradient {
+    @apply bg-gradient-to-br from-green-50 to-emerald-100;
+  }
+  
+  .soft-yellow-gradient {
+    @apply bg-gradient-to-br from-amber-50 to-yellow-100;
+  }
+  
+  .soft-pink-gradient {
+    @apply bg-gradient-to-br from-pink-50 to-rose-100;
+  }
+  
+  .soft-purple-gradient {
+    @apply bg-gradient-to-br from-purple-50 to-violet-100;
+  }
+  
+  .soft-main-gradient {
+    @apply bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50;
+  }
+  
+  .admin-gradient {
+    @apply bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-100;
   }
 }

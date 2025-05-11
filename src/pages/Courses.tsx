@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -74,7 +74,7 @@ const courses = [
 
 const CourseCard = ({ course }: { course: typeof courses[0] }) => {
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <div className="h-48 overflow-hidden">
         <img 
           src={course.image} 
@@ -100,7 +100,7 @@ const CourseCard = ({ course }: { course: typeof courses[0] }) => {
         </p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full flex items-center justify-center gap-2">
+        <Button className="w-full flex items-center justify-center gap-2 bg-marketplace-primary hover:bg-marketplace-primary/80">
           <Play className="h-4 w-4" />
           Start Course
         </Button>
@@ -111,7 +111,7 @@ const CourseCard = ({ course }: { course: typeof courses[0] }) => {
 
 const Courses = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen soft-main-gradient">
       <AuthProvider>
         <CurrencyProvider>
           <Navbar />
