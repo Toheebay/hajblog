@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X } from 'lucide-react';
-import AuthModal from '@/components/AuthModal';
+import { AuthModal } from '@/components/AuthModal';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Navbar: React.FC = () => {

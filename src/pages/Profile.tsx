@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { facebook, instagram, twitter, linkedin } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -55,10 +55,10 @@ const Profile: React.FC = () => {
 
   const SocialIcon = ({ platform }: { platform: keyof typeof socialLinks }) => {
     const icons = {
-      facebook: <facebook className="h-5 w-5" />,
-      twitter: <twitter className="h-5 w-5" />,
-      instagram: <instagram className="h-5 w-5" />,
-      linkedin: <linkedin className="h-5 w-5" />
+      facebook: <Facebook className="h-5 w-5" />,
+      twitter: <Twitter className="h-5 w-5" />,
+      instagram: <Instagram className="h-5 w-5" />,
+      linkedin: <Linkedin className="h-5 w-5" />
     };
     
     return icons[platform];
