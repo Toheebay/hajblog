@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getBlogPosts } from '@/services/blogService';
 import type { BlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { BookOpen, PenTool, AlertCircle } from 'lucide-react';
+import { BookOpen, PenTool, AlertCircle, Users } from 'lucide-react';
 
 const Blog = () => {
   const { user } = useAuth();
@@ -74,24 +74,24 @@ const Blog = () => {
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-16">
         <div className="marketplace-container text-center">
           <div className="text-6xl mb-4">📖</div>
-          <h1 className="text-4xl font-bold mb-4">Hajj Ambassador Blog</h1>
+          <h1 className="text-4xl font-bold mb-4">Hajj Community Blog</h1>
           <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
-            Daily insights, guidance, and stories from your journey to the sacred lands
+            Share your experiences, learn from fellow pilgrims, and connect with the Hajj community
           </p>
         </div>
       </div>
       
       <div className="marketplace-container py-16">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Latest Posts</h2>
-            <p className="text-gray-600 mt-1">Stay updated with daily Hajj guidance</p>
+            <h2 className="text-2xl font-bold text-gray-800">Community Posts</h2>
+            <p className="text-gray-600 mt-1">Share insights and learn from fellow pilgrims</p>
           </div>
-          {user?.isAdmin && (
+          {user && (
             <Link to="/blog/create">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
                 <PenTool className="h-4 w-4 mr-2" />
-                Create New Post
+                Share Your Story
               </Button>
             </Link>
           )}
@@ -101,20 +101,22 @@ const Blog = () => {
           <Card className="bg-white/80 backdrop-blur-sm p-8 text-center border-emerald-200">
             <CardContent className="pt-6 flex flex-col items-center">
               <div className="bg-emerald-100 rounded-full p-6 mb-6">
-                <BookOpen className="h-12 w-12 text-emerald-600" />
+                <Users className="h-12 w-12 text-emerald-600" />
               </div>
-              <h3 className="text-2xl font-semibold mb-3 text-gray-800">Welcome to Our Blog</h3>
+              <h3 className="text-2xl font-semibold mb-3 text-gray-800">Welcome to Our Community Blog</h3>
               <p className="text-gray-600 mb-6 max-w-md">
-                This is where we'll share daily insights, tips, and guidance for your Hajj journey. 
-                Check back regularly for new content!
+                This is where pilgrims share experiences, insights, and guidance for the Hajj journey. 
+                Be the first to share your story!
               </p>
-              {user?.isAdmin && (
+              {user ? (
                 <Link to="/blog/create">
                   <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
                     <PenTool className="h-4 w-4 mr-2" />
                     Create First Post
                   </Button>
                 </Link>
+              ) : (
+                <p className="text-gray-500">Please log in to share your story</p>
               )}
             </CardContent>
           </Card>

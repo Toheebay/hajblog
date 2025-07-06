@@ -41,24 +41,19 @@ const CreateBlogPost: React.FC = () => {
   const mutation = useMutation({
     mutationFn: createBlogPost,
     onSuccess: () => {
-      toast.success("Blog post published successfully! 📝", {
-        description: "Your Hajj guidance is now live for pilgrims"
+      toast.success("Story shared successfully! 📝", {
+        description: "Your experience is now live for the community"
       });
       navigate('/blog');
     },
     onError: () => {
-      toast.error("Failed to publish blog post. Please try again.");
+      toast.error("Failed to share your story. Please try again.");
     }
   });
 
   const onSubmit = (values: BlogPostFormValues) => {
     if (!user) {
-      toast.error("You must be logged in to create a blog post");
-      return;
-    }
-
-    if (!user.isAdmin) {
-      toast.error("Only administrators can create blog posts");
+      toast.error("You must be logged in to share a story");
       return;
     }
 
@@ -74,9 +69,9 @@ const CreateBlogPost: React.FC = () => {
     });
   };
 
-  if (!user || !user.isAdmin) {
+  if (!user) {
     navigate('/blog');
-    toast.error("Access denied. Only administrators can create blog posts.");
+    toast.error("Please log in to share your story.");
     return null;
   }
 
@@ -93,8 +88,8 @@ const CreateBlogPost: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Blog
           </button>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Create New Blog Post</h1>
-          <p className="text-gray-600">Share daily insights and guidance for Hajj pilgrims</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Share Your Story</h1>
+          <p className="text-gray-600">Share your experiences and insights with fellow pilgrims</p>
         </div>
         
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-6 md:p-8 max-w-4xl border-emerald-200">
@@ -105,10 +100,10 @@ const CreateBlogPost: React.FC = () => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-700 font-medium">Post Title</FormLabel>
+                    <FormLabel className="text-gray-700 font-medium">Story Title</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder="e.g., Essential Tips for First-Time Hajj Pilgrims" 
+                        placeholder="e.g., My First Hajj Experience" 
                         className="border-emerald-200 focus:border-emerald-500" 
                         {...field} 
                       />
@@ -123,13 +118,13 @@ const CreateBlogPost: React.FC = () => {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-700 font-medium">Content</FormLabel>
+                    <FormLabel className="text-gray-700 font-medium">Your Story</FormLabel>
                     <FormDescription className="text-gray-500">
-                      Write your post content. Markdown formatting is supported.
+                      Share your experiences, insights, or advice for fellow pilgrims.
                     </FormDescription>
                     <FormControl>
                       <Textarea 
-                        placeholder="Share your wisdom and guidance for Hajj pilgrims..." 
+                        placeholder="Share your Hajj journey, lessons learned, or advice for other pilgrims..." 
                         className="min-h-[400px] border-emerald-200 focus:border-emerald-500"
                         {...field} 
                       />
@@ -144,16 +139,16 @@ const CreateBlogPost: React.FC = () => {
                 name="image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-700 font-medium">Featured Image URL (optional)</FormLabel>
+                    <FormLabel className="text-gray-700 font-medium">Image URL (optional)</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder="https://example.com/hajj-image.jpg" 
+                        placeholder="https://example.com/your-image.jpg" 
                         className="border-emerald-200 focus:border-emerald-500" 
                         {...field} 
                       />
                     </FormControl>
                     <FormDescription className="text-gray-500">
-                      Add a relevant image to make your post more engaging
+                      Add a photo to make your story more engaging
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -168,13 +163,13 @@ const CreateBlogPost: React.FC = () => {
                     <FormLabel className="text-gray-700 font-medium">Tags (optional)</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder="hajj, pilgrimage, mecca, guidance, tips" 
+                        placeholder="hajj, experience, tips, advice, spiritual" 
                         className="border-emerald-200 focus:border-emerald-500" 
                         {...field} 
                       />
                     </FormControl>
                     <FormDescription className="text-gray-500">
-                      Comma-separated tags to help categorize your post
+                      Comma-separated tags to help categorize your story
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -195,7 +190,7 @@ const CreateBlogPost: React.FC = () => {
                   className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
                   disabled={mutation.isPending}
                 >
-                  {mutation.isPending ? "Publishing..." : "Publish Post"}
+                  {mutation.isPending ? "Sharing..." : "Share Story"}
                 </Button>
               </div>
             </form>
