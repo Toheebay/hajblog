@@ -6,117 +6,122 @@ export interface Item {
   description: string;
   image: string;
   category: string;
+  location: string;
   seller: {
     id: string;
     name: string;
     avatar: string;
   };
-  location: string;
   createdAt: string;
 }
 
+// Hajj-specific categories for the marketplace
+export const categories = [
+  "All",
+  "Accommodation", 
+  "Transportation", 
+  "Tour Guides", 
+  "Visa Services", 
+  "Travel Insurance", 
+  "Religious Items", 
+  "Halal Food", 
+  "Medical Services",
+  "Money Exchange", 
+  "Communication Services", 
+  "Luggage Services", 
+  "Emergency Services"
+];
+
+// Sample Hajj-related items
 export const items: Item[] = [
   {
     id: "1",
-    title: "Vintage Wooden Coffee Table",
-    price: 120,
-    description: "Beautiful handcrafted wooden coffee table in excellent condition. Slight signs of use but overall great quality.",
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Furniture",
+    title: "Premium Hajj Accommodation Near Haram",
+    price: 299,
+    description: "5-star hotel accommodation just 200m from Masjid al-Haram with air conditioning, prayer facilities, and halal breakfast included. Perfect for your sacred journey.",
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&auto=format&fit=crop",
+    category: "Accommodation",
+    location: "Makkah, Saudi Arabia",
     seller: {
-      id: "101",
-      name: "Emma Johnson",
-      avatar: "https://i.pravatar.cc/150?img=1",
+      id: "seller1",
+      name: "Ahmed Al-Rashid",
+      avatar: "https://i.pravatar.cc/150?u=ahmed"
     },
-    location: "Brooklyn, NY",
-    createdAt: "2023-04-12T10:30:00Z",
+    createdAt: "2024-01-15T10:30:00Z"
   },
   {
     id: "2",
-    title: "Modern Sofa with Cushions",
-    price: 450,
-    description: "Comfortable modern sofa in gray fabric. Includes 3 matching cushions. Only used for 6 months, like new condition.",
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Furniture",
+    title: "Professional Hajj Guide Services",
+    price: 150,
+    description: "Experienced Hajj guide with 15+ years of experience. Fluent in Arabic, English, and Urdu. Will assist you through all Hajj rituals with patience and care.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop",
+    category: "Tour Guides",
+    location: "Makkah & Madinah",
     seller: {
-      id: "102",
-      name: "Michael Chen",
-      avatar: "https://i.pravatar.cc/150?img=2",
+      id: "seller2",
+      name: "Fatima Hassan",
+      avatar: "https://i.pravatar.cc/150?u=fatima"
     },
-    location: "Austin, TX",
-    createdAt: "2023-05-03T14:15:00Z",
+    createdAt: "2024-01-14T15:45:00Z"
   },
   {
     id: "3",
-    title: "Tabby Cat - Needs New Home",
-    price: 0,
-    description: "Sweet 2-year-old tabby cat looking for a loving home. Vaccinated and neutered. Very friendly with children.",
-    image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Pets",
+    title: "Hajj Transportation Package",
+    price: 89,
+    description: "Comfortable air-conditioned transportation between Makkah, Madinah, and holy sites. Includes airport pickup and drop-off with experienced drivers.",
+    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop",
+    category: "Transportation",
+    location: "Saudi Arabia",
     seller: {
-      id: "103",
-      name: "Sarah Williams",
-      avatar: "https://i.pravatar.cc/150?img=3",
+      id: "seller3",
+      name: "Omar Transportation",
+      avatar: "https://i.pravatar.cc/150?u=omar"
     },
-    location: "Portland, OR",
-    createdAt: "2023-05-15T09:45:00Z",
+    createdAt: "2024-01-13T09:20:00Z"
   },
   {
     id: "4",
-    title: "Mountain Bike - Good Condition",
-    price: 280,
-    description: "Trek mountain bike, 3 years old but well maintained. 21 gears, front suspension, new tires installed last month.",
-    image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Sports",
+    title: "Complete Hajj Visa Processing",
+    price: 199,
+    description: "Fast and reliable Hajj visa processing service. We handle all documentation and embassy procedures. 99% approval rate with money-back guarantee.",
+    image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&auto=format&fit=crop",
+    category: "Visa Services",
+    location: "Online Service",
     seller: {
-      id: "104",
-      name: "James Rodriguez",
-      avatar: "https://i.pravatar.cc/150?img=4",
+      id: "seller4",
+      name: "Global Visa Solutions",
+      avatar: "https://i.pravatar.cc/150?u=visa"
     },
-    location: "Denver, CO",
-    createdAt: "2023-06-02T16:20:00Z",
+    createdAt: "2024-01-12T14:10:00Z"
   },
   {
     id: "5",
-    title: "iPhone 12 - Mint Condition",
-    price: 399,
-    description: "iPhone 12 64GB in perfect condition. Includes original box, charger, and new screen protector. Battery health at 92%.",
-    image: "https://images.unsplash.com/photo-1605236453806-6ff36851218e?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Electronics",
+    title: "Organic Halal Meals for Pilgrims",
+    price: 25,
+    description: "Fresh, organic halal meals prepared according to Islamic guidelines. Available for delivery to your accommodation in Makkah and Madinah.",
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=800&auto=format&fit=crop",
+    category: "Halal Food",
+    location: "Makkah & Madinah",
     seller: {
-      id: "105",
-      name: "Alex Thompson",
-      avatar: "https://i.pravatar.cc/150?img=5",
+      id: "seller5",
+      name: "Pure Halal Kitchen",
+      avatar: "https://i.pravatar.cc/150?u=kitchen"
     },
-    location: "Miami, FL",
-    createdAt: "2023-06-10T11:05:00Z",
+    createdAt: "2024-01-11T11:30:00Z"
   },
   {
     id: "6",
-    title: "Vintage Leather Jacket",
-    price: 85,
-    description: "Classic brown leather jacket, size M. Real leather with minimal wear. Great for fall weather.",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    category: "Clothing",
+    title: "Emergency Medical Services",
+    price: 0,
+    description: "24/7 emergency medical assistance for pilgrims. Certified medical team with ambulance services available throughout your Hajj journey.",
+    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&auto=format&fit=crop",
+    category: "Medical Services",
+    location: "Makkah & Madinah",
     seller: {
-      id: "106",
-      name: "Olivia Martinez",
-      avatar: "https://i.pravatar.cc/150?img=6",
+      id: "seller6",
+      name: "Hajj Medical Care",
+      avatar: "https://i.pravatar.cc/150?u=medical"
     },
-    location: "Chicago, IL",
-    createdAt: "2023-06-18T13:40:00Z",
+    createdAt: "2024-01-10T16:45:00Z"
   }
-];
-
-export const categories = [
-  "All",
-  "Furniture",
-  "Electronics",
-  "Clothing",
-  "Sports",
-  "Pets",
-  "Books",
-  "Toys",
-  "Vehicles",
-  "Jewelry"
 ];
