@@ -10,14 +10,20 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getBlogPosts } from '@/services/blogService';
 import type { BlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { BookOpen, PenTool } from 'lucide-react';
+import { BookOpen, PenTool, AlertCircle } from 'lucide-react';
 
 const Blog = () => {
   const { user } = useAuth();
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ['blogPosts'],
-    queryFn: getBlogPosts
+    queryFn: getBlogPosts,
+    retry: 2,
+    retryDelay: 1000
   });
+
+  console.log('Blog posts data:', posts);
+  console.log('Blog loading state:', isLoading);
+  console.log('Blog error:', error);
 
   if (isLoading) {
     return (
@@ -34,16 +40,31 @@ const Blog = () => {
   }
 
   if (error) {
+    console.error('Blog error details:', error);
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
         <Navbar />
         <div className="marketplace-container py-24 flex flex-col items-center">
-          <p className="text-red-500 mb-4">Error loading blog posts</p>
-          <Button onClick={() => window.location.reload()}>Retry</Button>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-8 text-center border-red-200 border max-w-md">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2 text-gray-800">Blog Service Unavailable</h3>
+            <p className="text-gray-600 mb-4">
+              We're experiencing technical difficulties with the blog service. This might be because the backend server is not running.
+            </p>
+            <Button 
+              onClick={() => window.location.reload()}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              Try Again
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
+
+  // Ensure posts is an array
+  const blogPosts = Array.isArray(posts) ? posts : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
@@ -76,7 +97,7 @@ const Blog = () => {
           )}
         </div>
         
-        {posts?.length === 0 ? (
+        {blogPosts.length === 0 ? (
           <Card className="bg-white/80 backdrop-blur-sm p-8 text-center border-emerald-200">
             <CardContent className="pt-6 flex flex-col items-center">
               <div className="bg-emerald-100 rounded-full p-6 mb-6">
@@ -99,7 +120,7 @@ const Blog = () => {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post: BlogPost) => (
+            {blogPosts.map((post: BlogPost) => (
               <Card key={post.id} className="overflow-hidden bg-white/80 backdrop-blur-sm border-emerald-200 hover:shadow-lg transition-all duration-300">
                 {post.image && (
                   <div className="h-48 overflow-hidden">
