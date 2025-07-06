@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
           <nav className="flex items-center justify-between py-4">
             {/* Logo */}
             <Link to="/" className="text-xl font-bold">
-              Market<span className="text-marketplace-accent">Chat</span> {currencySymbol}
+              Hajj<span className="text-marketplace-accent">Ambassador</span> {currencySymbol}
             </Link>
 
             {/* Desktop Navigation */}
@@ -71,10 +71,10 @@ const Navbar: React.FC = () => {
                 Mentorship
               </Link>
               <Link
-                to="/community"
-                className={`hover:text-marketplace-accent ${isActive('/community') ? 'text-marketplace-accent' : ''}`}
+                to="/blog"
+                className={`hover:text-marketplace-accent ${isActive('/blog') ? 'text-marketplace-accent' : ''}`}
               >
-                Community
+                Blog
               </Link>
               <Link
                 to="/donate"
@@ -107,6 +107,13 @@ const Navbar: React.FC = () => {
                       Create Listing
                     </Button>
                   </Link>
+                  {user.isAdmin && (
+                    <Link to="/blog/create">
+                      <Button className="bg-amber-500 hover:bg-amber-600">
+                        New Post
+                      </Button>
+                    </Link>
+                  )}
                   <Link to="/profile">
                     <Button variant="outline" className="border-white text-white hover:bg-marketplace-dark">
                       My Profile
@@ -149,8 +156,8 @@ const Navbar: React.FC = () => {
               <Link to="/mentorship" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
                 Mentorship
               </Link>
-              <Link to="/community" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
-                Community
+              <Link to="/blog" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
+                Blog
               </Link>
               <Link to="/donate" onClick={closeMenu} className="px-4 py-2 hover:bg-marketplace-dark rounded">
                 Donate
@@ -176,6 +183,13 @@ const Navbar: React.FC = () => {
                       Create Listing
                     </Button>
                   </Link>
+                  {user.isAdmin && (
+                    <Link to="/blog/create" onClick={closeMenu} className="block">
+                      <Button className="w-full justify-start bg-amber-500 hover:bg-amber-600">
+                        New Post
+                      </Button>
+                    </Link>
+                  )}
                   <Link to="/profile" onClick={closeMenu} className="block">
                     <Button variant="outline" className="w-full justify-start border-white text-white hover:bg-marketplace-dark">
                       My Profile
