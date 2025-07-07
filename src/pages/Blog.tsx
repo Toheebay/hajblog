@@ -13,17 +13,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getBlogPosts } from '@/services/blogService';
 import type { BlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { BookOpen, PenTool, AlertCircle, Users, Filter } from 'lucide-react';
+import { BookOpen, PenTool, AlertCircle, Users, Filter, Lock } from 'lucide-react';
 
 const categories = [
   'All Posts',
   'Hajj Experience',
+  'Hajj Reviews',
   'Spiritual Journey', 
   'Travel Tips',
   'Islamic History',
   'Community Stories',
   'Advice & Guidance',
-  'Personal Reflection'
+  'Personal Reflection',
+  'Pilgrimage Preparation',
+  'Makkah Experiences',
+  'Madinah Experiences'
 ];
 
 const Blog = () => {
@@ -101,13 +105,13 @@ const Blog = () => {
           <div className="text-4xl md:text-6xl mb-4">📖</div>
           <h1 className="text-2xl md:text-4xl font-bold mb-4">Hajj Community Blog</h1>
           <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto">
-            Share your experiences, learn from fellow pilgrims, and connect with the Hajj community
+            Share your Hajj experiences, reviews, and insights with fellow pilgrims
           </p>
         </div>
       </div>
       
       <div className="marketplace-container py-8 md:py-16">
-        {/* Categories Filter - Now as Dropdown */}
+        {/* Categories Filter */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Browse by Category</h3>
           <div className="flex items-center gap-2 max-w-xs">
@@ -136,13 +140,19 @@ const Blog = () => {
               {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} found
             </p>
           </div>
-          {user && (
+          {user ? (
             <Link to="/blog/create">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto">
                 <PenTool className="h-4 w-4 mr-2" />
                 Share Your Story
               </Button>
             </Link>
+          ) : (
+            <div className="text-center p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <Lock className="h-6 w-6 text-amber-600 mx-auto mb-2" />
+              <p className="text-amber-800 font-medium mb-2">Login Required</p>
+              <p className="text-amber-700 text-sm">Please log in to share your Hajj experiences and reviews</p>
+            </div>
           )}
         </div>
         
@@ -153,11 +163,11 @@ const Blog = () => {
                 <Users className="h-12 w-12 text-emerald-600" />
               </div>
               <h3 className="text-xl md:text-2xl font-semibold mb-3 text-gray-800">
-                {selectedCategory === 'All Posts' ? 'Welcome to Our Community Blog' : `No posts in ${selectedCategory}`}
+                {selectedCategory === 'All Posts' ? 'Welcome to Our Hajj Community Blog' : `No posts in ${selectedCategory}`}
               </h3>
               <p className="text-gray-600 mb-6 max-w-md">
                 {selectedCategory === 'All Posts' 
-                  ? 'This is where pilgrims share experiences, insights, and guidance for the Hajj journey. Be the first to share your story!'
+                  ? 'This is where pilgrims share experiences, insights, and reviews for the Hajj journey. Join our community and share your story!'
                   : `Be the first to share content in the ${selectedCategory} category!`
                 }
               </p>
@@ -169,7 +179,10 @@ const Blog = () => {
                   </Button>
                 </Link>
               ) : (
-                <p className="text-gray-500">Please log in to share your story</p>
+                <div className="text-center">
+                  <Lock className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-500">Please log in to share your Hajj story</p>
+                </div>
               )}
             </CardContent>
           </Card>
