@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Sparkles, TrendingUp, Users } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user } = useAuth();
@@ -54,13 +55,44 @@ const Header: React.FC = () => {
         )}
         
         {!user && (
-          <div className="mt-8">
-            <Link 
-              to="/create-listing" 
-              className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-4 rounded-lg font-medium transition-all text-lg shadow-lg"
-            >
-              Start Your Hajj Business Today - 20 Free Ads!
-            </Link>
+          <div className="mt-8 max-w-2xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
+              <div className="flex justify-center items-center gap-2 mb-4">
+                <Sparkles className="h-6 w-6 text-amber-300" />
+                <h2 className="text-2xl font-bold text-white">Start Your Hajj Business</h2>
+                <Sparkles className="h-6 w-6 text-amber-300" />
+              </div>
+              
+              <p className="text-emerald-100 mb-6 text-lg">
+                Join thousands of successful Hajj service providers on our platform
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center">
+                <div className="bg-white/5 rounded-lg p-4">
+                  <div className="text-amber-300 text-2xl font-bold">20</div>
+                  <div className="text-emerald-200 text-sm">Free Ads</div>
+                </div>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <TrendingUp className="h-6 w-6 text-amber-300 mx-auto mb-1" />
+                  <div className="text-emerald-200 text-sm">Boost Sales</div>
+                </div>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <Users className="h-6 w-6 text-amber-300 mx-auto mb-1" />
+                  <div className="text-emerald-200 text-sm">50K+ Pilgrims</div>
+                </div>
+              </div>
+              
+              <Link 
+                to="/create-listing" 
+                className="inline-block bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-8 py-4 rounded-lg font-medium transition-all text-lg shadow-lg transform hover:scale-105"
+              >
+                Start Free - Create Your First Ad
+              </Link>
+              
+              <p className="text-emerald-200 text-sm mt-3">
+                No credit card required • Get started in 2 minutes
+              </p>
+            </div>
           </div>
         )}
       </div>

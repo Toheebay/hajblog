@@ -11,9 +11,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { getBlogPosts } from '@/services/blogService';
+import { AuthModal } from '@/components/AuthModal';
 import type { BlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { BookOpen, PenTool, AlertCircle, Users, Filter, Lock } from 'lucide-react';
+import { BookOpen, PenTool, AlertCircle, Users, Filter, Lock, LogIn } from 'lucide-react';
 
 const categories = [
   'All Posts',
@@ -33,6 +34,7 @@ const categories = [
 const Blog = () => {
   const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState('All Posts');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ['blogPosts'],
@@ -44,6 +46,15 @@ const Blog = () => {
   console.log('Blog posts data:', posts);
   console.log('Blog loading state:', isLoading);
   console.log('Blog error:', error);
+
+  const handleShareStoryClick = () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+    } else {
+      // Navigate to create post
+      window.location.href = '/blog/create';
+    }
+  };
 
   if (isLoading) {
     return (
@@ -104,9 +115,23 @@ const Blog = () => {
         <div className="marketplace-container text-center">
           <div className="text-4xl md:text-6xl mb-4">📖</div>
           <h1 className="text-2xl md:text-4xl font-bold mb-4">Hajj Community Blog</h1>
-          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto mb-6">
             Share your Hajj experiences, reviews, and insights with fellow pilgrims
           </p>
+          {!user && (
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto">
+              <Lock className="h-8 w-8 text-amber-300 mx-auto mb-3" />
+              <p className="text-amber-200 font-medium mb-3">Join Our Community</p>
+              <p className="text-emerald-100 text-sm mb-4">Sign up to share your Hajj experiences and connect with fellow pilgrims</p>
+              <Button 
+                onClick={() => setIsAuthModalOpen(true)}
+                className="bg-amber-500 hover:bg-amber-600 text-white w-full"
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign Up / Login
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       
@@ -117,10 +142,10 @@ const Blog = () => {
           <div className="flex items-center gap-2 max-w-xs">
             <Filter className="h-4 w-4 text-gray-600" />
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full border-emerald-200 focus:border-emerald-500">
+              <SelectTrigger className="w-full border-emerald-200 focus:border-emerald-500 bg-white">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-emerald-200">
+              <SelectContent className="bg-white border-emerald-200 z-50">
                 {categories.map((category) => (
                   <SelectItem key={category} value={category} className="hover:bg-emerald-50">
                     {category}
@@ -140,20 +165,13 @@ const Blog = () => {
               {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} found
             </p>
           </div>
-          {user ? (
-            <Link to="/blog/create">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto">
-                <PenTool className="h-4 w-4 mr-2" />
-                Share Your Story
-              </Button>
-            </Link>
-          ) : (
-            <div className="text-center p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <Lock className="h-6 w-6 text-amber-600 mx-auto mb-2" />
-              <p className="text-amber-800 font-medium mb-2">Login Required</p>
-              <p className="text-amber-700 text-sm">Please log in to share your Hajj experiences and reviews</p>
-            </div>
-          )}
+          <Button 
+            onClick={handleShareStoryClick}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto"
+          >
+            <PenTool className="h-4 w-4 mr-2" />
+            Share Your Story
+          </Button>
         </div>
         
         {filteredPosts.length === 0 ? (
@@ -171,19 +189,13 @@ const Blog = () => {
                   : `Be the first to share content in the ${selectedCategory} category!`
                 }
               </p>
-              {user ? (
-                <Link to="/blog/create">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                    <PenTool className="h-4 w-4 mr-2" />
-                    Create First Post
-                  </Button>
-                </Link>
-              ) : (
-                <div className="text-center">
-                  <Lock className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500">Please log in to share your Hajj story</p>
-                </div>
-              )}
+              <Button 
+                onClick={handleShareStoryClick}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                <PenTool className="h-4 w-4 mr-2" />
+                {user ? 'Create First Post' : 'Join & Create Post'}
+              </Button>
             </CardContent>
           </Card>
         ) : (
@@ -231,6 +243,12 @@ const Blog = () => {
           </div>
         )}
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
     </div>
   );
 };
