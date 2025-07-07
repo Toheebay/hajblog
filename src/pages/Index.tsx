@@ -18,6 +18,9 @@ const Index = () => {
   const { user, canCreateAd } = useAuth();
   const navigate = useNavigate();
   
+  // Get unique categories from items
+  const categories = ['All', ...Array.from(new Set(items.map(item => item.category)))];
+  
   const filteredItems = items.filter(item => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -50,8 +53,9 @@ const Index = () => {
       
       <div className="marketplace-container py-10">
         <CategoryFilter 
+          categories={categories}
           selectedCategory={selectedCategory} 
-          onSelectCategory={setSelectedCategory} 
+          onCategoryChange={setSelectedCategory} 
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
