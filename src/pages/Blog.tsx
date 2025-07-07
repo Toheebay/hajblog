@@ -8,11 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { getBlogPosts } from '@/services/blogService';
 import type { BlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
-import { BookOpen, PenTool, AlertCircle, Users, ExternalLink } from 'lucide-react';
+import { BookOpen, PenTool, AlertCircle, Users, Filter } from 'lucide-react';
 
 const categories = [
   'All Posts',
@@ -99,71 +100,30 @@ const Blog = () => {
         <div className="marketplace-container text-center">
           <div className="text-4xl md:text-6xl mb-4">📖</div>
           <h1 className="text-2xl md:text-4xl font-bold mb-4">Hajj Community Blog</h1>
-          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto mb-6">
+          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto">
             Share your experiences, learn from fellow pilgrims, and connect with the Hajj community
           </p>
-          
-          {/* Medium Profile Link */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 max-w-md mx-auto">
-            <p className="text-emerald-100 text-sm mb-2">Follow our featured writer:</p>
-            <a 
-              href="https://medium.com/@adebayotoheeb" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-white hover:text-emerald-200 transition-colors"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              @adebayotoheeb on Medium
-            </a>
-          </div>
         </div>
       </div>
       
       <div className="marketplace-container py-8 md:py-16">
-        {/* Categories Filter */}
+        {/* Categories Filter - Now as Dropdown */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Browse by Category</h3>
-          
-          {/* Mobile: Horizontal scroll */}
-          <div className="md:hidden">
-            <ScrollArea className="w-full whitespace-nowrap">
-              <div className="flex space-x-2 pb-4">
+          <div className="flex items-center gap-2 max-w-xs">
+            <Filter className="h-4 w-4 text-gray-600" />
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-full border-emerald-200 focus:border-emerald-500">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-emerald-200">
                 {categories.map((category) => (
-                  <Button
-                    key={category}
-                    variant={selectedCategory === category ? "default" : "outline"}
-                    size="sm"
-                    className={`flex-shrink-0 ${
-                      selectedCategory === category 
-                        ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
-                        : "hover:bg-emerald-50 hover:text-emerald-700 border-emerald-200"
-                    }`}
-                    onClick={() => setSelectedCategory(category)}
-                  >
+                  <SelectItem key={category} value={category} className="hover:bg-emerald-50">
                     {category}
-                  </Button>
+                  </SelectItem>
                 ))}
-              </div>
-            </ScrollArea>
-          </div>
-
-          {/* Desktop: Wrapped grid */}
-          <div className="hidden md:flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                size="sm"
-                className={
-                  selectedCategory === category 
-                    ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
-                    : "hover:bg-emerald-50 hover:text-emerald-700 border-emerald-200"
-                }
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </Button>
-            ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

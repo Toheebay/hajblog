@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -155,6 +156,8 @@ const courses = [
 ];
 
 const CourseCard = ({ course }: { course: typeof courses[0] }) => {
+  const navigate = useNavigate();
+  
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur-sm border-emerald-200">
       <div className="h-48 overflow-hidden rounded-t-lg">
@@ -191,7 +194,10 @@ const CourseCard = ({ course }: { course: typeof courses[0] }) => {
         </p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white">
+        <Button 
+          className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+          onClick={() => navigate(`/courses/${course.id}`)}
+        >
           <Play className="h-4 w-4" />
           Start Learning
         </Button>
