@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { SupabaseAuthProvider } from "@/contexts/SupabaseAuthContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
 import MyListings from "./pages/MyListings";
@@ -32,10 +33,11 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <BrowserRouter>
-          <AuthProvider>
+          <SupabaseAuthProvider>
             <CurrencyProvider>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/create-listing" element={<CreateListing />} />
                 <Route path="/my-listings" element={<MyListings />} />
@@ -55,7 +57,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </CurrencyProvider>
-          </AuthProvider>
+          </SupabaseAuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

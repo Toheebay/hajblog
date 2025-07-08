@@ -1,102 +1,137 @@
 
 import React from 'react';
-import SearchBar from './SearchBar';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Sparkles, TrendingUp, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Star, Users, Award, TrendingUp, Sparkles } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const { user } = useAuth();
-  const isMobile = useIsMobile();
-  
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* Header background with Islamic green gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-800 via-green-700 to-teal-600" style={{ height: '500px' }}>
-        {/* Overlay with Islamic pattern opacity */}
-        <div className="absolute inset-0 bg-black/20"></div>
-      </div>
+    <section className="relative overflow-hidden bg-gradient-to-br from-marketplace-primary via-marketplace-accent to-marketplace-secondary text-white">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-l from-white/10 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-marketplace-secondary/20 to-transparent rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
       
-      <div className="relative z-10 marketplace-container pt-28 pb-20 flex flex-col items-center">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-center mb-4 text-white">
-            Hajj Ambassador <span className="text-amber-300">Marketplace</span>
-          </h1>
-          <div className="flex items-center justify-center gap-2 text-amber-200 text-lg mb-4">
-            <span className="text-2xl">🕋</span>
-            <span>Connect • Trade • Serve the Pilgrims</span>
-            <span className="text-2xl">🕋</span>
-          </div>
-        </div>
-        
-        <p className="text-white text-center max-w-3xl mb-8 text-lg px-4">
-          The premier marketplace for Hajj ambassadors and service providers. 
-          Connect pilgrims with trusted services, accommodations, and guidance for their sacred journey.
-        </p>
-        
-        <div className="w-full max-w-2xl mb-6">
-          <SearchBar onSearch={() => {}} />
-        </div>
-        
-        {user && (
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 text-center">
-            <p className="text-white text-sm mb-2">
-              <span className="font-semibold">{user.username}</span> • 
-              <span className="capitalize text-amber-200 ml-1">{user.subscriptionTier} Plan</span>
-            </p>
-            <p className="text-amber-200 text-sm">
-              {user.subscriptionTier === 'enterprise' 
-                ? 'Unlimited ads remaining' 
-                : `${(user.maxAds || 0) - (user.adsUsed || 0)} ads remaining`
-              }
-            </p>
-          </div>
-        )}
-        
-        {!user && (
-          <div className="mt-8 max-w-2xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
-              <div className="flex justify-center items-center gap-2 mb-4">
-                <Sparkles className="h-6 w-6 text-amber-300" />
-                <h2 className="text-2xl font-bold text-white">Start Your Hajj Business</h2>
-                <Sparkles className="h-6 w-6 text-amber-300" />
+      <div className="marketplace-container relative z-10">
+        <div className="py-16 md:py-24 lg:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="space-y-8 animate-slide-up">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
+                <Sparkles className="w-4 h-4 text-yellow-300" />
+                <span>Trusted by 10,000+ pilgrims worldwide</span>
               </div>
               
-              <p className="text-emerald-100 mb-6 text-lg">
-                Join thousands of successful Hajj service providers on our platform
-              </p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Your Trusted
+                <span className="block text-yellow-300">Hajj Marketplace</span>
+              </h1>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center">
-                <div className="bg-white/5 rounded-lg p-4">
-                  <div className="text-amber-300 text-2xl font-bold">20</div>
-                  <div className="text-emerald-200 text-sm">Free Ads</div>
+              <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl">
+                Connect with verified agents, discover premium packages, and join a community 
+                of faithful pilgrims preparing for their sacred journey.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg" 
+                  className="bg-yellow-400 hover:bg-yellow-500 text-marketplace-primary font-semibold px-8 py-4 text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                >
+                  Explore Packages
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-white text-white hover:bg-white hover:text-marketplace-primary font-semibold px-8 py-4 text-lg transition-all"
+                >
+                  Join Community
+                </Button>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
+                <div className="text-center">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-lg mb-2 mx-auto">
+                    <Users className="w-6 h-6 text-yellow-300" />
+                  </div>
+                  <div className="text-2xl font-bold">10K+</div>
+                  <div className="text-sm text-white/80">Happy Pilgrims</div>
                 </div>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <TrendingUp className="h-6 w-6 text-amber-300 mx-auto mb-1" />
-                  <div className="text-emerald-200 text-sm">Boost Sales</div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-lg mb-2 mx-auto">
+                    <Award className="w-6 h-6 text-yellow-300" />
+                  </div>
+                  <div className="text-2xl font-bold">500+</div>
+                  <div className="text-sm text-white/80">Verified Agents</div>
                 </div>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <Users className="h-6 w-6 text-amber-300 mx-auto mb-1" />
-                  <div className="text-emerald-200 text-sm">50K+ Pilgrims</div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-lg mb-2 mx-auto">
+                    <Star className="w-6 h-6 text-yellow-300" />
+                  </div>
+                  <div className="text-2xl font-bold">4.9</div>
+                  <div className="text-sm text-white/80">Average Rating</div>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-lg mb-2 mx-auto">
+                    <TrendingUp className="w-6 h-6 text-yellow-300" />
+                  </div>
+                  <div className="text-2xl font-bold">99%</div>
+                  <div className="text-sm text-white/80">Success Rate</div>
                 </div>
               </div>
-              
-              <Link 
-                to="/create-listing" 
-                className="inline-block bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-8 py-4 rounded-lg font-medium transition-all text-lg shadow-lg transform hover:scale-105"
-              >
-                Start Free - Create Your First Ad
-              </Link>
-              
-              <p className="text-emerald-200 text-sm mt-3">
-                No credit card required • Get started in 2 minutes
-              </p>
+            </div>
+
+            {/* Right Content - Enhanced Business Section */}
+            <div className="relative animate-fade-in">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-10 border border-white/20 shadow-2xl">
+                <div className="text-center space-y-6">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-300 text-marketplace-primary px-4 py-2 rounded-full font-semibold text-sm">
+                    <Sparkles className="w-4 h-4" />
+                    LIMITED TIME OFFER
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-bold text-white">
+                    Start Your Hajj Business Today
+                  </h2>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between bg-white/10 rounded-xl p-4">
+                      <span className="text-white/90">Free Ads Included</span>
+                      <span className="bg-yellow-400 text-marketplace-primary px-3 py-1 rounded-full font-bold">
+                        20 FREE
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between bg-white/10 rounded-xl p-4">
+                      <span className="text-white/90">Verified Badge</span>
+                      <Award className="w-5 h-5 text-yellow-300" />
+                    </div>
+                    
+                    <div className="flex items-center justify-between bg-white/10 rounded-xl p-4">
+                      <span className="text-white/90">Premium Support</span>
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4">
+                    <Button 
+                      size="lg" 
+                      className="w-full bg-gradient-to-r from-yellow-400 to-yellow-300 hover:from-yellow-500 hover:to-yellow-400 text-marketplace-primary font-bold py-4 text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                    >
+                      Get Started Free
+                      <Sparkles className="w-5 h-5 ml-2" />
+                    </Button>
+                  </div>
+                  
+                  <p className="text-xs text-white/70">
+                    No credit card required • Setup in 5 minutes
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
