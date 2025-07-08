@@ -90,6 +90,11 @@ const SubscriptionPlans: React.FC = () => {
     // Here you would typically update the user's subscription in your backend
   };
 
+  const getUserDisplayName = () => {
+    if (!user) return 'User';
+    return user.user_metadata?.username || user.email?.split('@')[0] || 'User';
+  };
+
   return (
     <div className="py-16 px-4">
       <div className="marketplace-container">
@@ -155,7 +160,7 @@ const SubscriptionPlans: React.FC = () => {
                   <FlutterwavePayment
                     amount={plan.price}
                     customerEmail={user.email || ''}
-                    customerName={user.username || 'User'}
+                    customerName={getUserDisplayName()}
                     title={`${plan.name} Plan Subscription`}
                     description={`Monthly subscription for ${plan.name} plan`}
                     onSuccess={(data) => handleSubscriptionSuccess(plan.id, data)}

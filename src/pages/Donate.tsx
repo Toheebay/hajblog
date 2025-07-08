@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -33,10 +32,15 @@ declare global {
 const Donate: React.FC = () => {
   const { user } = useSupabaseAuth();
 
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    return user.user_metadata?.username || user.email?.split('@')[0] || '';
+  };
+
   const form = useForm<DonationFormValues>({
     resolver: zodResolver(donationSchema),
     defaultValues: {
-      name: user ? user.username || "" : "",
+      name: user ? getUserDisplayName() : "",
       email: user ? user.email || "" : "",
       amount: 10,
       message: ""
