@@ -9,13 +9,13 @@ import SubscriptionPlans from '@/components/SubscriptionPlans';
 import { items } from '@/data/items';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { toast } from 'sonner';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const { user, canCreateAd } = useAuth();
+  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
   
   // Get unique categories from items
@@ -36,13 +36,8 @@ const Index = () => {
       return;
     }
     
-    if (!canCreateAd()) {
-      toast.error("You've reached your ad limit", {
-        description: "Upgrade your plan to continue serving pilgrims"
-      });
-      return;
-    }
-    
+    // Simple check - authenticated users can create listings
+    // You can add more sophisticated ad limit checking here if needed
     navigate('/create-listing');
   };
 
