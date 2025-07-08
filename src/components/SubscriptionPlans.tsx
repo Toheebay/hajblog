@@ -3,11 +3,13 @@ import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { Check, Star, Crown, Zap } from 'lucide-react';
+import FlutterwavePayment from './FlutterwavePayment';
+import { toast } from 'sonner';
 
 const SubscriptionPlans: React.FC = () => {
-  const { user, upgradeSubscription } = useAuth();
+  const { user } = useSupabaseAuth();
 
   const plans = [
     {
@@ -29,7 +31,7 @@ const SubscriptionPlans: React.FC = () => {
     {
       id: 'basic',
       name: 'Basic',
-      price: 25,
+      price: 15000, // ₦15,000
       maxAds: 100,
       icon: <Check className="h-6 w-6" />,
       features: [
@@ -46,7 +48,7 @@ const SubscriptionPlans: React.FC = () => {
     {
       id: 'premium',
       name: 'Premium',
-      price: 50,
+      price: 30000, // ₦30,000
       maxAds: 500,
       icon: <Star className="h-6 w-6" />,
       features: [
@@ -64,7 +66,7 @@ const SubscriptionPlans: React.FC = () => {
     {
       id: 'enterprise',
       name: 'Enterprise',
-      price: 100,
+      price: 60000, // ₦60,000
       maxAds: -1,
       icon: <Crown className="h-6 w-6" />,
       features: [
@@ -82,10 +84,10 @@ const SubscriptionPlans: React.FC = () => {
     }
   ];
 
-  const handleUpgrade = (planId: string) => {
-    if (planId !== 'free') {
-      upgradeSubscription(planId as 'basic' | 'premium' | 'enterprise');
-    }
+  const handleSubscriptionSuccess = (planId: string, paymentData: any) => {
+    console.log(`Subscription to ${planId} successful:`, paymentData);
+    toast.success(`Successfully subscribed to ${planId} plan!`);
+    // Here you would typically update the user's subscription in your backend
   };
 
   return (
@@ -106,21 +108,15 @@ const SubscriptionPlans: React.FC = () => {
               key={plan.id} 
               className={`relative overflow-hidden transition-all duration-300 hover:shadow-xl ${
                 plan.popular ? 'ring-2 ring-amber-400 transform scale-105' : ''
-              } ${user?.subscriptionTier === plan.id ? 'ring-2 ring-emerald-500' : ''}`}
+              }`}
             >
               {plan.popular && (
                 <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-center py-2 text-sm font-medium">
                   Most Popular
                 </div>
               )}
-              
-              {user?.subscriptionTier === plan.id && (
-                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-emerald-400 to-green-500 text-white text-center py-2 text-sm font-medium">
-                  Your Current Plan
-                </div>
-              )}
 
-              <CardHeader className={`text-center ${plan.popular || user?.subscriptionTier === plan.id ? 'pt-12' : 'pt-6'}`}>
+              <CardHeader className={`text-center ${plan.popular ? 'pt-12' : 'pt-6'}`}>
                 <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${plan.color} flex items-center justify-center text-white`}>
                   {plan.icon}
                 </div>
@@ -128,7 +124,7 @@ const SubscriptionPlans: React.FC = () => {
                   {plan.name}
                 </CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mb-2">
-                  ${plan.price}
+                  ₦{plan.price.toLocaleString()}
                   {plan.price > 0 && <span className="text-lg text-gray-500">/month</span>}
                 </div>
                 <p className="text-gray-600">
@@ -148,24 +144,37 @@ const SubscriptionPlans: React.FC = () => {
               </CardContent>
 
               <CardFooter className="px-6 pb-6">
-                <Button
-                  onClick={() => handleUpgrade(plan.id)}
-                  disabled={user?.subscriptionTier === plan.id}
-                  className={`w-full ${
-                    user?.subscriptionTier === plan.id 
-                      ? 'bg-gray-300 text-gray-600 cursor-not-allowed' 
-                      : plan.popular 
+                {plan.id === 'free' ? (
+                  <Button
+                    className="w-full bg-gray-300 text-gray-600"
+                    disabled
+                  >
+                    Current Plan
+                  </Button>
+                ) : user ? (
+                  <FlutterwavePayment
+                    amount={plan.price}
+                    customerEmail={user.email || ''}
+                    customerName={user.username || 'User'}
+                    title={`${plan.name} Plan Subscription`}
+                    description={`Monthly subscription for ${plan.name} plan`}
+                    onSuccess={(data) => handleSubscriptionSuccess(plan.id, data)}
+                    className={`w-full ${
+                      plan.popular 
                         ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700' 
                         : 'bg-emerald-600 hover:bg-emerald-700'
-                  } text-white`}
-                >
-                  {user?.subscriptionTier === plan.id 
-                    ? 'Current Plan' 
-                    : plan.id === 'free' 
-                      ? 'Get Started' 
-                      : 'Upgrade Now'
-                  }
-                </Button>
+                    } text-white`}
+                  >
+                    Subscribe Now
+                  </FlutterwavePayment>
+                ) : (
+                  <Button
+                    className="w-full bg-gray-400 text-white"
+                    disabled
+                  >
+                    Login to Subscribe
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           ))}

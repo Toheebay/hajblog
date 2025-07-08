@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { createDonation } from '@/services/donationService';
 import { Heart } from 'lucide-react';
 
@@ -24,14 +24,20 @@ const donationSchema = z.object({
 
 type DonationFormValues = z.infer<typeof donationSchema>;
 
+declare global {
+  interface Window {
+    FlutterwaveCheckout: (options: any) => void;
+  }
+}
+
 const Donate: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
 
   const form = useForm<DonationFormValues>({
     resolver: zodResolver(donationSchema),
     defaultValues: {
-      name: user ? user.username : "",
-      email: "", // Updated to default to empty since User type doesn't have email property
+      name: user ? user.username || "" : "",
+      email: user ? user.email || "" : "",
       amount: 10,
       message: ""
     },
@@ -49,19 +55,55 @@ const Donate: React.FC = () => {
   });
 
   const onSubmit = (values: DonationFormValues) => {
-    // Normally we'd integrate with a payment processor like Stripe here
-    // For now, we'll just simulate a successful donation
-    
-    mutation.mutate({
-      donor: {
-        name: values.name,
-        email: values.email,
-        userId: user?.id
-      },
-      amount: values.amount,
-      message: values.message
-    });
+    // Use Flutterwave for payment processing
+    if (window.FlutterwaveCheckout) {
+      window.FlutterwaveCheckout({
+        public_key: "FLWPUBK-3d0e062fa50b5b538affc64535245178-X",
+        tx_ref: "tx_" + Date.now(),
+        amount: values.amount,
+        currency: "NGN",
+        payment_options: "card,banktransfer,ussd",
+        customer: {
+          email: values.email,
+          phone_number: "",
+          name: values.name,
+        },
+        callback: function (data: any) {
+          console.log("Payment complete", data);
+          if (data.status === "successful") {
+            mutation.mutate({
+              donor: {
+                name: values.name,
+                email: values.email,
+                userId: user?.id
+              },
+              amount: values.amount,
+              message: values.message
+            });
+          }
+        },
+        customizations: {
+          title: "HajjAmbassador Donation",
+          description: "Support our community platform",
+          logo: "https://your-logo-url.com/logo.png"
+        },
+      });
+    } else {
+      toast.error("Payment system not loaded. Please refresh and try again.");
+    }
   };
+
+  React.useEffect(() => {
+    // Load Flutterwave script
+    const script = document.createElement('script');
+    script.src = 'https://checkout.flutterwave.com/v3.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -121,7 +163,7 @@ const Donate: React.FC = () => {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Amount ($)</FormLabel>
+                          <FormLabel>Amount (₦)</FormLabel>
                           <FormControl>
                             <Input type="number" min="1" {...field} />
                           </FormControl>
@@ -152,7 +194,7 @@ const Donate: React.FC = () => {
                       className="w-full bg-marketplace-accent hover:bg-marketplace-dark"
                       disabled={mutation.isPending}
                     >
-                      {mutation.isPending ? "Processing..." : "Donate Now"}
+                      {mutation.isPending ? "Processing..." : "Donate with Flutterwave"}
                     </Button>
                   </form>
                 </Form>
@@ -188,12 +230,16 @@ const Donate: React.FC = () => {
               
               <Card>
                 <CardHeader>
-                  <CardTitle>Our Promise</CardTitle>
+                  <CardTitle>Secure Payment</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
-                    We're committed to transparency. Your donations directly fund platform development, community resources, and educational content. Thank you for your support!
+                  <p className="text-gray-600 mb-4">
+                    We use Flutterwave's secure payment gateway to process donations safely.
                   </p>
+                  <div className="flex items-center space-x-4">
+                    <span className="text-sm text-gray-500">Powered by</span>
+                    <span className="font-semibold text-orange-600">Flutterwave</span>
+                  </div>
                 </CardContent>
               </Card>
             </div>

@@ -8,11 +8,15 @@
   "background_color": "#1a365d",
   "theme_color": "#2563eb",
   "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["travel", "lifestyle", "education", "religion"],
   "icons": [
     {
       "src": "/favicon.ico",
-      "sizes": "16x16 32x32",
-      "type": "image/x-icon"
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
     },
     {
       "src": "/placeholder.svg",
@@ -27,12 +31,34 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["travel", "lifestyle", "education"],
   "screenshots": [
     {
       "src": "/placeholder.svg",
       "sizes": "320x640",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Services",
+      "short_name": "Browse",
+      "description": "Browse Hajj services and packages",
+      "url": "/",
+      "icons": [{"src": "/placeholder.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "My Account",
+      "short_name": "Account",
+      "description": "Access your account and profile",
+      "url": "/profile",
+      "icons": [{"src": "/placeholder.svg", "sizes": "96x96"}]
     }
   ]
 }
