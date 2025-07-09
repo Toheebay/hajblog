@@ -6,6 +6,10 @@ export interface Item {
   price: number;
   currency: string;
   category: string;
+  image: string; // Primary image for display
+  images: string[]; // Additional images
+  location: string; // Added location field
+  createdAt: string; // Added createdAt field
   seller: {
     id: string;
     name: string;
@@ -18,7 +22,6 @@ export interface Item {
     phone: string;
     website: string;
   };
-  images: string[];
   features: string[];
   duration: string;
   groupSize: string;
@@ -35,6 +38,13 @@ export const items: Item[] = [
     price: 8500,
     currency: "USD",
     category: "Hajj Packages",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=600&h=400&fit=crop"
+    ],
+    location: "Makkah, Saudi Arabia",
+    createdAt: "2024-01-15T10:30:00Z",
     seller: {
       id: "seller1",
       name: "Ahmed Al-Rashid",
@@ -47,10 +57,6 @@ export const items: Item[] = [
       phone: "+966501234567",
       website: "https://hajjservices.com"
     },
-    images: [
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=600&h=400&fit=crop"
-    ],
     features: [
       "5-star accommodation",
       "Private transportation",
@@ -86,6 +92,13 @@ export const items: Item[] = [
     price: 2800,
     currency: "USD",
     category: "Umrah Packages",
+    image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&h=400&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop"
+    ],
+    location: "Jeddah, Saudi Arabia",
+    createdAt: "2024-02-01T14:20:00Z",
     seller: {
       id: "seller2",
       name: "Fatima Al-Zahra",
@@ -98,10 +111,6 @@ export const items: Item[] = [
       phone: "+966502345678",
       website: "https://umrahexpress.com"
     },
-    images: [
-      "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop"
-    ],
     features: [
       "4-star accommodation",
       "Airport transfers",
@@ -136,6 +145,13 @@ export const items: Item[] = [
     price: 12000,
     currency: "USD",
     category: "Hajj Packages",
+    image: "https://images.unsplash.com/photo-1544765503-6877a1b7dea2?w=600&h=400&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1544765503-6877a1b7dea2?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1574282893019-1aa73378b2dd?w=600&h=400&fit=crop"
+    ],
+    location: "Makkah, Saudi Arabia",
+    createdAt: "2024-01-20T09:15:00Z",
     seller: {
       id: "seller3",
       name: "Omar Hassan",
@@ -148,10 +164,6 @@ export const items: Item[] = [
       phone: "+966503456789",
       website: "https://familyhajj.com"
     },
-    images: [
-      "https://images.unsplash.com/photo-1544765503-6877a1b7dea2?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1574282893019-1aa73378b2dd?w=600&h=400&fit=crop"
-    ],
     features: [
       "Family rooms",
       "Child care services",

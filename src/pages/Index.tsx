@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
 import ItemCard from '@/components/ItemCard';
+import EventCarousel from '@/components/EventCarousel';
 import SubscriptionPlans from '@/components/SubscriptionPlans';
 import { items } from '@/data/items';
 import { Button } from '@/components/ui/button';
@@ -36,8 +37,6 @@ const Index = () => {
       return;
     }
     
-    // Simple check - authenticated users can create listings
-    // You can add more sophisticated ad limit checking here if needed
     navigate('/create-listing');
   };
 
@@ -47,6 +46,17 @@ const Index = () => {
       <Header />
       
       <div className="marketplace-container py-10">
+        {/* Event Carousel Section */}
+        <section className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Islamic Events Around the World</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Discover the beauty of Islamic architecture and sacred places from around the globe
+            </p>
+          </div>
+          <EventCarousel />
+        </section>
+
         <CategoryFilter 
           categories={categories}
           selectedCategory={selectedCategory} 

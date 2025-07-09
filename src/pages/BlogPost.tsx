@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { marked } from 'marked';
 import Navbar from '@/components/Navbar';
+import SocialShare from '@/components/SocialShare';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
@@ -94,10 +95,10 @@ const BlogPost = () => {
           )}
           
           <div className="p-6 md:p-8">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start mb-6">
               <div>
                 <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
-                <div className="flex items-center text-gray-500 mb-6">
+                <div className="flex items-center text-gray-500 mb-4">
                   <span>By {post.authorName}</span>
                   <span className="mx-2">•</span>
                   <span>{format(new Date(post.createdAt || Date.now()), 'MMMM dd, yyyy')}</span>
@@ -126,6 +127,14 @@ const BlogPost = () => {
                   </Button>
                 </div>
               )}
+            </div>
+
+            {/* Social Share Component */}
+            <div className="mb-6">
+              <SocialShare 
+                title={post.title}
+                description={post.content?.substring(0, 150) + '...' || ''}
+              />
             </div>
             
             <Separator className="my-6" />
