@@ -37,11 +37,15 @@ const Donate: React.FC = () => {
     return user.user_metadata?.username || user.email?.split('@')[0] || '';
   };
 
+  const getUserEmail = () => {
+    return user?.email || '';
+  };
+
   const form = useForm<DonationFormValues>({
     resolver: zodResolver(donationSchema),
     defaultValues: {
       name: user ? getUserDisplayName() : "",
-      email: user ? user.email || "" : "",
+      email: user ? getUserEmail() : "",
       amount: 10,
       message: ""
     },
@@ -59,6 +63,12 @@ const Donate: React.FC = () => {
   });
 
   const onSubmit = (values: DonationFormValues) => {
+    // Ensure we have a valid email
+    if (!values.email) {
+      toast.error("Email is required for donation processing.");
+      return;
+    }
+
     // Use Flutterwave for payment processing
     if (window.FlutterwaveCheckout) {
       window.FlutterwaveCheckout({
@@ -72,6 +82,7 @@ const Donate: React.FC = () => {
           phone_number: "",
           name: values.name,
         },
+        customer_email: values.email, // Explicitly set customer_email
         callback: function (data: any) {
           console.log("Payment complete", data);
           if (data.status === "successful") {

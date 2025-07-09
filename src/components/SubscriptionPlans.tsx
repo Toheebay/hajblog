@@ -95,6 +95,10 @@ const SubscriptionPlans: React.FC = () => {
     return user.user_metadata?.username || user.email?.split('@')[0] || 'User';
   };
 
+  const getUserEmail = () => {
+    return user?.email || '';
+  };
+
   return (
     <div className="py-16 px-4">
       <div className="marketplace-container">
@@ -159,7 +163,7 @@ const SubscriptionPlans: React.FC = () => {
                 ) : user ? (
                   <FlutterwavePayment
                     amount={plan.price}
-                    customerEmail={user.email || ''}
+                    customerEmail={getUserEmail()}
                     customerName={getUserDisplayName()}
                     title={`${plan.name} Plan Subscription`}
                     description={`Monthly subscription for ${plan.name} plan`}

@@ -50,6 +50,11 @@ const FlutterwavePayment: React.FC<FlutterwavePaymentProps> = ({
       return;
     }
 
+    if (!customerEmail) {
+      toast.error("Email is required for payment processing.");
+      return;
+    }
+
     window.FlutterwaveCheckout({
       public_key: "FLWPUBK-3d0e062fa50b5b538affc64535245178-X",
       tx_ref: "tx_" + Date.now(),
@@ -61,6 +66,7 @@ const FlutterwavePayment: React.FC<FlutterwavePaymentProps> = ({
         phone_number: customerPhone,
         name: customerName,
       },
+      customer_email: customerEmail, // Explicitly set customer_email
       callback: function (data: any) {
         console.log("Payment complete", data);
         if (data.status === "successful") {
