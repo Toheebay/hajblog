@@ -87,8 +87,7 @@ const Header: React.FC = () => {
                 <Button 
                   onClick={handleJoinCommunity}
                   size="lg" 
-                  variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white hover:text-marketplace-primary font-semibold px-8 py-4 text-lg transition-all"
+                  className="bg-gradient-to-r from-yellow-400 to-green-400 hover:from-yellow-500 hover:to-green-500 text-marketplace-primary font-semibold px-8 py-4 text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
                 >
                   Join Community
                 </Button>

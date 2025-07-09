@@ -2,126 +2,181 @@
 export interface Item {
   id: string;
   title: string;
-  price: number;
   description: string;
-  image: string;
+  price: number;
+  currency: string;
   category: string;
-  location: string;
   seller: {
     id: string;
     name: string;
     avatar: string;
+    rating: number;
+    reviews: number;
+    location: string;
+    email: string;
+    whatsapp: string;
+    phone: string;
+    website: string;
   };
-  createdAt: string;
+  images: string[];
+  features: string[];
+  duration: string;
+  groupSize: string;
+  includes: string[];
+  excludes: string[];
+  dates: string[];
 }
 
-// Hajj-specific categories for the marketplace
-export const categories = [
-  "All",
-  "Accommodation", 
-  "Transportation", 
-  "Tour Guides", 
-  "Visa Services", 
-  "Travel Insurance", 
-  "Religious Items", 
-  "Halal Food", 
-  "Medical Services",
-  "Money Exchange", 
-  "Communication Services", 
-  "Luggage Services", 
-  "Emergency Services"
-];
-
-// Sample Hajj-related items
 export const items: Item[] = [
   {
     id: "1",
-    title: "Premium Hajj Accommodation Near Haram",
-    price: 299,
-    description: "5-star hotel accommodation just 200m from Masjid al-Haram with air conditioning, prayer facilities, and halal breakfast included. Perfect for your sacred journey.",
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&auto=format&fit=crop",
-    category: "Accommodation",
-    location: "Makkah, Saudi Arabia",
+    title: "Premium Hajj Package 2024",
+    description: "Complete Hajj pilgrimage package with 5-star accommodation in Makkah and Madinah. Includes guided tours, transportation, and all religious ceremonies.",
+    price: 8500,
+    currency: "USD",
+    category: "Hajj Packages",
     seller: {
       id: "seller1",
       name: "Ahmed Al-Rashid",
-      avatar: "https://i.pravatar.cc/150?u=ahmed"
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      rating: 4.9,
+      reviews: 156,
+      location: "Riyadh, Saudi Arabia",
+      email: "ahmed@hajjservices.com",
+      whatsapp: "+966501234567",
+      phone: "+966501234567",
+      website: "https://hajjservices.com"
     },
-    createdAt: "2024-01-15T10:30:00Z"
+    images: [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=600&h=400&fit=crop"
+    ],
+    features: [
+      "5-star accommodation",
+      "Private transportation",
+      "English-speaking guide",
+      "Group prayers coordination",
+      "24/7 support"
+    ],
+    duration: "15 days",
+    groupSize: "20-30 people",
+    includes: [
+      "Round-trip flights",
+      "Visa processing",
+      "Hotel accommodation",
+      "All meals",
+      "Transportation",
+      "Guided tours"
+    ],
+    excludes: [
+      "Personal expenses",
+      "Shopping",
+      "Optional tours",
+      "Travel insurance"
+    ],
+    dates: [
+      "2024-06-10 to 2024-06-25",
+      "2024-06-15 to 2024-06-30"
+    ]
   },
   {
     id: "2",
-    title: "Professional Hajj Guide Services",
-    price: 150,
-    description: "Experienced Hajj guide with 15+ years of experience. Fluent in Arabic, English, and Urdu. Will assist you through all Hajj rituals with patience and care.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop",
-    category: "Tour Guides",
-    location: "Makkah & Madinah",
+    title: "Umrah Express Package",
+    description: "Quick 7-day Umrah package perfect for busy professionals. Comfortable 4-star hotels with convenient locations.",
+    price: 2800,
+    currency: "USD",
+    category: "Umrah Packages",
     seller: {
       id: "seller2",
-      name: "Fatima Hassan",
-      avatar: "https://i.pravatar.cc/150?u=fatima"
+      name: "Fatima Al-Zahra",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      rating: 4.8,
+      reviews: 89,
+      location: "Jeddah, Saudi Arabia",
+      email: "fatima@umrahexpress.com",
+      whatsapp: "+966502345678",
+      phone: "+966502345678",
+      website: "https://umrahexpress.com"
     },
-    createdAt: "2024-01-14T15:45:00Z"
+    images: [
+      "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop"
+    ],
+    features: [
+      "4-star accommodation",
+      "Airport transfers",
+      "Group coordination",
+      "Flexible schedule"
+    ],
+    duration: "7 days",
+    groupSize: "15-25 people",
+    includes: [
+      "Round-trip flights",
+      "Visa processing",
+      "Hotel accommodation",
+      "Breakfast & dinner",
+      "Airport transfers"
+    ],
+    excludes: [
+      "Lunch",
+      "Personal expenses",
+      "Shopping",
+      "Travel insurance"
+    ],
+    dates: [
+      "2024-03-15 to 2024-03-22",
+      "2024-04-01 to 2024-04-08",
+      "2024-04-15 to 2024-04-22"
+    ]
   },
   {
     id: "3",
-    title: "Hajj Transportation Package",
-    price: 89,
-    description: "Comfortable air-conditioned transportation between Makkah, Madinah, and holy sites. Includes airport pickup and drop-off with experienced drivers.",
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop",
-    category: "Transportation",
-    location: "Saudi Arabia",
+    title: "Family Hajj Package",
+    description: "Special family-oriented Hajj package with spacious family rooms and child-friendly services.",
+    price: 12000,
+    currency: "USD",
+    category: "Hajj Packages",
     seller: {
       id: "seller3",
-      name: "Omar Transportation",
-      avatar: "https://i.pravatar.cc/150?u=omar"
+      name: "Omar Hassan",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      rating: 4.7,
+      reviews: 124,
+      location: "Makkah, Saudi Arabia",
+      email: "omar@familyhajj.com",
+      whatsapp: "+966503456789",
+      phone: "+966503456789",
+      website: "https://familyhajj.com"
     },
-    createdAt: "2024-01-13T09:20:00Z"
-  },
-  {
-    id: "4",
-    title: "Complete Hajj Visa Processing",
-    price: 199,
-    description: "Fast and reliable Hajj visa processing service. We handle all documentation and embassy procedures. 99% approval rate with money-back guarantee.",
-    image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&auto=format&fit=crop",
-    category: "Visa Services",
-    location: "Online Service",
-    seller: {
-      id: "seller4",
-      name: "Global Visa Solutions",
-      avatar: "https://i.pravatar.cc/150?u=visa"
-    },
-    createdAt: "2024-01-12T14:10:00Z"
-  },
-  {
-    id: "5",
-    title: "Organic Halal Meals for Pilgrims",
-    price: 25,
-    description: "Fresh, organic halal meals prepared according to Islamic guidelines. Available for delivery to your accommodation in Makkah and Madinah.",
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=800&auto=format&fit=crop",
-    category: "Halal Food",
-    location: "Makkah & Madinah",
-    seller: {
-      id: "seller5",
-      name: "Pure Halal Kitchen",
-      avatar: "https://i.pravatar.cc/150?u=kitchen"
-    },
-    createdAt: "2024-01-11T11:30:00Z"
-  },
-  {
-    id: "6",
-    title: "Emergency Medical Services",
-    price: 0,
-    description: "24/7 emergency medical assistance for pilgrims. Certified medical team with ambulance services available throughout your Hajj journey.",
-    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&auto=format&fit=crop",
-    category: "Medical Services",
-    location: "Makkah & Madinah",
-    seller: {
-      id: "seller6",
-      name: "Hajj Medical Care",
-      avatar: "https://i.pravatar.cc/150?u=medical"
-    },
-    createdAt: "2024-01-10T16:45:00Z"
+    images: [
+      "https://images.unsplash.com/photo-1544765503-6877a1b7dea2?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1574282893019-1aa73378b2dd?w=600&h=400&fit=crop"
+    ],
+    features: [
+      "Family rooms",
+      "Child care services",
+      "Educational programs",
+      "Family-friendly schedule"
+    ],
+    duration: "18 days",
+    groupSize: "10-15 families",
+    includes: [
+      "Round-trip flights",
+      "Visa processing",
+      "Family accommodation",
+      "All meals",
+      "Child care",
+      "Educational tours"
+    ],
+    excludes: [
+      "Personal expenses",
+      "Medical expenses",
+      "Shopping",
+      "Additional activities"
+    ],
+    dates: [
+      "2024-06-20 to 2024-07-08",
+      "2024-07-01 to 2024-07-19"
+    ]
   }
 ];
