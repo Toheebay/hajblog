@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { getBlogPosts } from '@/services/blogService';
 import { AuthModal } from '@/components/AuthModal';
 import type { BlogPost } from '@/services/blogService';
@@ -32,7 +32,7 @@ const categories = [
 ];
 
 const Blog = () => {
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
   const [selectedCategory, setSelectedCategory] = useState('All Posts');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   
@@ -51,7 +51,6 @@ const Blog = () => {
     if (!user) {
       setIsAuthModalOpen(true);
     } else {
-      // Navigate to create post
       window.location.href = '/blog/create';
     }
   };
@@ -78,9 +77,9 @@ const Blog = () => {
         <div className="marketplace-container py-24 flex flex-col items-center">
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-8 text-center border-red-200 border max-w-md">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2 text-gray-800">Blog Service Unavailable</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-800">Blog Service Error</h3>
             <p className="text-gray-600 mb-4">
-              We're experiencing technical difficulties with the blog service. This might be because the backend server is not running.
+              There was an error loading the blog posts. Please try refreshing the page.
             </p>
             <Button 
               onClick={() => window.location.reload()}
@@ -94,10 +93,8 @@ const Blog = () => {
     );
   }
 
-  // Ensure posts is an array
   const blogPosts = Array.isArray(posts) ? posts : [];
 
-  // Filter posts by category
   const filteredPosts = selectedCategory === 'All Posts' 
     ? blogPosts 
     : blogPosts.filter(post => 
@@ -110,7 +107,6 @@ const Blog = () => {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
       <Navbar />
       
-      {/* Hero Section */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-12 md:py-16">
         <div className="marketplace-container text-center">
           <div className="text-4xl md:text-6xl mb-4">📖</div>
@@ -136,7 +132,6 @@ const Blog = () => {
       </div>
       
       <div className="marketplace-container py-8 md:py-16">
-        {/* Categories Filter */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Browse by Category</h3>
           <div className="flex items-center gap-2 max-w-xs">
@@ -244,7 +239,6 @@ const Blog = () => {
         )}
       </div>
 
-      {/* Auth Modal */}
       <AuthModal 
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

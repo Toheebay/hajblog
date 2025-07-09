@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { createBlogPost } from '@/services/blogService';
 import { ArrowLeft } from 'lucide-react';
 
@@ -25,7 +25,7 @@ const blogPostSchema = z.object({
 type BlogPostFormValues = z.infer<typeof blogPostSchema>;
 
 const CreateBlogPost: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
 
   const form = useForm<BlogPostFormValues>({
@@ -65,7 +65,7 @@ const CreateBlogPost: React.FC = () => {
       image: values.image || undefined,
       tags: tagsArray.length > 0 ? tagsArray : undefined,
       author: user.id,
-      authorName: user.username
+      authorName: user.email?.split('@')[0] || 'Anonymous'
     });
   };
 

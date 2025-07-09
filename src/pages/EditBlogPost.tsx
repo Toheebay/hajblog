@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -11,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { getBlogPost, updateBlogPost } from '@/services/blogService';
 
 const blogPostSchema = z.object({
@@ -25,7 +24,7 @@ type BlogPostFormValues = z.infer<typeof blogPostSchema>;
 
 const EditBlogPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
 
   const { data: post, isLoading: isLoadingPost } = useQuery({
@@ -79,7 +78,6 @@ const EditBlogPost: React.FC = () => {
       return;
     }
 
-    // Convert comma-separated tags string to array before submitting
     const tagsArray = values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : undefined;
 
     mutation.mutate({

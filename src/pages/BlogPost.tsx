@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import SocialShare from '@/components/SocialShare';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { getBlogPost, deleteBlogPost, updateBlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
 import { Edit, Trash2, ArrowLeft } from 'lucide-react';
@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
   const queryClient = useQueryClient();
   
   const { data: post, isLoading, error } = useQuery({
@@ -129,7 +129,6 @@ const BlogPost = () => {
               )}
             </div>
 
-            {/* Social Share Component */}
             <div className="mb-6">
               <SocialShare 
                 title={post.title}

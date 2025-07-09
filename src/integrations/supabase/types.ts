@@ -145,6 +145,42 @@ export type Database = {
           },
         ]
       }
+      blog_posts: {
+        Row: {
+          author: string
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          image: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           agent_id: string | null
