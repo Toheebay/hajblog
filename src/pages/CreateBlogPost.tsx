@@ -25,6 +25,7 @@ const CreateBlogPost = () => {
   });
 
   useEffect(() => {
+    // Only show auth modal if we're sure the user is not authenticated
     if (!authLoading && !user) {
       setIsAuthModalOpen(true);
     }
@@ -46,6 +47,7 @@ const CreateBlogPost = () => {
     e.preventDefault();
     
     if (!user) {
+      toast.error('Please sign in to create blog posts');
       setIsAuthModalOpen(true);
       return;
     }
@@ -85,12 +87,20 @@ const CreateBlogPost = () => {
     }
   };
 
+  const handleAuthSuccess = () => {
+    setIsAuthModalOpen(false);
+    toast.success('Welcome! You can now create blog posts.');
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="marketplace-container py-24 flex justify-center">
-          <p>Loading...</p>
+          <div className="flex items-center space-x-3">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
+            <p>Loading...</p>
+          </div>
         </div>
       </div>
     );
@@ -120,6 +130,7 @@ const CreateBlogPost = () => {
           <AuthModal 
             isOpen={isAuthModalOpen}
             onClose={handleAuthModalClose}
+            onAuthSuccess={handleAuthSuccess}
           />
         </div>
       </div>
@@ -133,7 +144,7 @@ const CreateBlogPost = () => {
       <div className="marketplace-container py-24">
         <button
           onClick={() => navigate('/blog')}
-          className="inline-flex items-center mb-6 text-gray-600 hover:text-gray-900"
+          className="inline-flex items-center mb-6 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to blog

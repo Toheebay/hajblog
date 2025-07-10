@@ -5,8 +5,8 @@
   "description": "Your trusted platform for Hajj services, courses, and community",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a365d",
-  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
@@ -47,18 +47,27 @@
   ],
   "shortcuts": [
     {
-      "name": "Browse Services",
-      "short_name": "Browse",
-      "description": "Browse Hajj services and packages",
-      "url": "/",
+      "name": "Create Blog Post",
+      "short_name": "Create",
+      "description": "Create a new blog post",
+      "url": "/blog/create",
       "icons": [{"src": "/placeholder.svg", "sizes": "96x96"}]
     },
     {
-      "name": "My Account",
-      "short_name": "Account",
-      "description": "Access your account and profile",
+      "name": "Browse Blog",
+      "short_name": "Blog",
+      "description": "Browse blog posts and experiences",
+      "url": "/blog",
+      "icons": [{"src": "/placeholder.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "My Profile",
+      "short_name": "Profile",
+      "description": "Access your profile and settings",
       "url": "/profile",
       "icons": [{"src": "/placeholder.svg", "sizes": "96x96"}]
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

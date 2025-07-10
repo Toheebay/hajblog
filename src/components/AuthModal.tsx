@@ -41,12 +41,13 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAuthSuccess?: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { signIn, signUp, resetPassword } = useSupabaseAuth();
-  const [isLoading, setIsLoading] = useState(false);
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuccess }) => {
+  const { signIn, signUp, resetPassword, isLoading } = useSupabaseAuth();
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState("signin");
 
   const signInForm = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -64,27 +65,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   });
 
   const handleSignIn = async (values: SignInValues) => {
-    setIsLoading(true);
     const { error } = await signIn(values.email, values.password);
     if (!error) {
+      onAuthSuccess?.();
       onClose();
     }
-    setIsLoading(false);
   };
 
   const handleSignUp = async (values: SignUpValues) => {
-    setIsLoading(true);
     const { error } = await signUp(values.email, values.password, values.username);
     if (!error) {
+      onAuthSuccess?.();
       onClose();
     }
-    setIsLoading(false);
   };
 
   const handleForgotPassword = async (values: ForgotPasswordValues) => {
-    setIsLoading(true);
     await resetPassword(values.email);
-    setIsLoading(false);
     setShowForgotPassword(false);
   };
 
@@ -156,7 +153,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </p>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="signin" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="signin" className="data-[state=active]:bg-marketplace-primary data-[state=active]:text-white">
                   Sign In
