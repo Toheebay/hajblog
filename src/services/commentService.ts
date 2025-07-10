@@ -14,14 +14,14 @@ export interface BlogComment {
 export const getBlogComments = async (blogPostId: string) => {
   try {
     const { data, error } = await supabase
-      .from('blog_comments')
+      .from('blog_comments' as any)
       .select('*')
       .eq('blog_post_id', blogPostId)
       .order('created_at', { ascending: true });
 
     if (error) throw error;
 
-    return data?.map(comment => ({
+    return data?.map((comment: any) => ({
       id: comment.id,
       blog_post_id: comment.blog_post_id,
       user_id: comment.user_id,
@@ -39,7 +39,7 @@ export const getBlogComments = async (blogPostId: string) => {
 export const createBlogComment = async (commentData: Partial<BlogComment>) => {
   try {
     const { data, error } = await supabase
-      .from('blog_comments')
+      .from('blog_comments' as any)
       .insert({
         blog_post_id: commentData.blog_post_id!,
         user_id: commentData.user_id!,
@@ -69,7 +69,7 @@ export const createBlogComment = async (commentData: Partial<BlogComment>) => {
 export const updateBlogComment = async (id: string, commentData: Partial<BlogComment>) => {
   try {
     const { data, error } = await supabase
-      .from('blog_comments')
+      .from('blog_comments' as any)
       .update({
         content: commentData.content
       })
@@ -97,7 +97,7 @@ export const updateBlogComment = async (id: string, commentData: Partial<BlogCom
 export const deleteBlogComment = async (id: string) => {
   try {
     const { error } = await supabase
-      .from('blog_comments')
+      .from('blog_comments' as any)
       .delete()
       .eq('id', id);
 
