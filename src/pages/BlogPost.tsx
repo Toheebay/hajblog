@@ -5,10 +5,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { marked } from 'marked';
 import Navbar from '@/components/Navbar';
 import SocialShare from '@/components/SocialShare';
+import BlogComments from '@/components/BlogComments';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
-import { getBlogPost, deleteBlogPost, updateBlogPost } from '@/services/blogService';
+import { getBlogPost, deleteBlogPost } from '@/services/blogService';
 import { format } from 'date-fns';
 import { Edit, Trash2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -155,6 +156,11 @@ const BlogPost = () => {
                 </div>
               </div>
             )}
+
+            <Separator className="my-8" />
+            
+            {/* Comments Section */}
+            <BlogComments blogPostId={id || ''} />
           </div>
         </div>
       </div>

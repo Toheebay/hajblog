@@ -1,114 +1,141 @@
-import React, { useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import Navbar from '@/components/Navbar';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
-import Navbar from '@/components/Navbar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { getBlogPost, updateBlogPost } from '@/services/blogService';
+import { ArrowLeft, Save, Lock } from 'lucide-react';
+import { toast } from 'sonner';
 
-const blogPostSchema = z.object({
-  title: z.string().min(3, { message: "Title must be at least 3 characters" }),
-  content: z.string().min(10, { message: "Content must be at least 10 characters" }),
-  image: z.string().url({ message: "Please enter a valid image URL" }).or(z.string().length(0)),
-  tags: z.string().optional()
-});
-
-type BlogPostFormValues = z.infer<typeof blogPostSchema>;
-
-const EditBlogPost: React.FC = () => {
+const EditBlogPost = () => {
   const { id } = useParams<{ id: string }>();
-  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
+  const { user, isLoading: authLoading } = useSupabaseAuth();
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    image: '',
+    tags: ''
+  });
 
-  const { data: post, isLoading: isLoadingPost } = useQuery({
+  const { data: post, isLoading: postLoading, error } = useQuery({
     queryKey: ['blogPost', id],
     queryFn: () => getBlogPost(id || ''),
     enabled: !!id
   });
 
-  const form = useForm<BlogPostFormValues>({
-    resolver: zodResolver(blogPostSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      image: "",
-      tags: ""
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => updateBlogPost(id, data),
+    onSuccess: () => {
+      toast.success('Blog post updated successfully!');
+      navigate(`/blog/${id}`);
     },
+    onError: (error) => {
+      console.error('Error updating blog post:', error);
+      toast.error('Failed to update blog post. Please try again.');
+    }
   });
 
   useEffect(() => {
     if (post) {
-      form.reset({
+      setFormData({
         title: post.title,
         content: post.content,
         image: post.image || '',
         tags: post.tags ? post.tags.join(', ') : ''
       });
     }
-  }, [post, form]);
+  }, [post]);
 
-  const mutation = useMutation({
-    mutationFn: (values: { id: string, title: string, content: string, image?: string, tags?: string[] }) => {
-      return updateBlogPost(id || '', values);
-    },
-    onSuccess: () => {
-      toast.success("Blog post updated successfully!");
-      navigate(`/blog/${id}`);
-    },
-    onError: () => {
-      toast.error("Failed to update blog post. Please try again.");
-    }
-  });
-
-  const onSubmit = (values: BlogPostFormValues) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
     if (!user) {
-      toast.error("You must be logged in to update a blog post");
+      toast.error('Please sign in to edit posts');
+      navigate('/blog');
       return;
     }
 
-    if (!post) {
-      toast.error("Post not found");
+    if (!formData.title.trim() || !formData.content.trim()) {
+      toast.error('Please fill in all required fields');
       return;
     }
 
-    const tagsArray = values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : undefined;
+    const tagsArray = formData.tags
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
 
-    mutation.mutate({
-      id: id || '',
-      title: values.title,
-      content: values.content,
-      image: values.image || undefined,
-      tags: tagsArray
+    updateMutation.mutate({
+      id: id!,
+      data: {
+        title: formData.title.trim(),
+        content: formData.content.trim(),
+        image: formData.image.trim() || undefined,
+        tags: tagsArray.length > 0 ? tagsArray : undefined
+      }
     });
   };
 
-  if (!user) {
-    navigate('/blog');
-    return null;
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-  if (isLoadingPost) {
+  if (authLoading || postLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="marketplace-container py-24 flex justify-center">
-          <p>Loading post...</p>
+          <p>Loading...</p>
         </div>
       </div>
     );
   }
 
-  if (post && post.author !== user.id) {
-    navigate(`/blog/${id}`);
-    toast.error("You don't have permission to edit this post");
-    return null;
+  if (error || !post) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="marketplace-container py-24 flex flex-col items-center">
+          <p className="text-red-500 mb-4">Blog post not found</p>
+          <Button onClick={() => navigate('/blog')}>Back to Blog</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || post.author !== user.id) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="marketplace-container py-24">
+          <Card className="max-w-md mx-auto text-center">
+            <CardContent className="pt-6">
+              <Lock className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
+              <p className="text-gray-600 mb-4">
+                You can only edit your own blog posts.
+              </p>
+              <Button 
+                onClick={() => navigate('/blog')}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                Back to Blog
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -116,99 +143,103 @@ const EditBlogPost: React.FC = () => {
       <Navbar />
       
       <div className="marketplace-container py-24">
-        <h1 className="text-3xl font-bold mb-6">Edit Blog Post</h1>
+        <button
+          onClick={() => navigate(`/blog/${id}`)}
+          className="inline-flex items-center mb-6 text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back to post
+        </button>
         
-        <div className="bg-white rounded-lg shadow-sm p-6 md:p-8 max-w-3xl mx-auto">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter post title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Content</FormLabel>
-                    <FormDescription>
-                      Supports Markdown formatting
-                    </FormDescription>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Write your blog post content here..." 
-                        className="min-h-[300px]"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Feature Image URL (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://example.com/image.jpg" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Provide a URL to an image for your blog post
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="tags"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tags (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="tag1, tag2, tag3" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Comma-separated list of tags
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <div className="flex justify-end space-x-2 pt-4">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+        <Card className="max-w-4xl mx-auto">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Save className="h-5 w-5 mr-2" />
+              Edit Blog Post
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                  Title *
+                </label>
+                <Input
+                  id="title"
+                  name="title"
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="Enter your blog post title"
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
+                  Featured Image URL (optional)
+                </label>
+                <Input
+                  id="image"
+                  name="image"
+                  type="url"
+                  value={formData.image}
+                  onChange={handleChange}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                  Content *
+                </label>
+                <Textarea
+                  id="content"
+                  name="content"
+                  required
+                  value={formData.content}
+                  onChange={handleChange}
+                  placeholder="Write your blog post content here... (Markdown supported)"
+                  className="w-full min-h-[300px]"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                  Tags (optional)
+                </label>
+                <Input
+                  id="tags"
+                  name="tags"
+                  type="text"
+                  value={formData.tags}
+                  onChange={handleChange}
+                  placeholder="Enter tags separated by commas (e.g., hajj, experience, travel)"
+                  className="w-full"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-4">
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => navigate(`/blog/${id}`)}
                 >
                   Cancel
                 </Button>
-                <Button 
-                  type="submit" 
-                  className="bg-marketplace-primary hover:bg-marketplace-dark"
-                  disabled={mutation.isPending}
+                <Button
+                  type="submit"
+                  disabled={updateMutation.isPending}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
-                  {mutation.isPending ? "Updating..." : "Update Post"}
+                  {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </form>
-          </Form>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
