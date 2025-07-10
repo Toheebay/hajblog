@@ -9,10 +9,10 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
-import { getBlogPosts } from '@/services/blogService';
-import { AuthModal } from '@/components/AuthModal';
-import type { BlogPost } from '@/services/blogService';
+import { useSimpleBlogAuth } from '@/contexts/SimpleBlogAuthContext';
+import { getBlogPosts } from '@/services/simpleBlogService';
+import { SimpleBlogAuthModal } from '@/components/SimpleBlogAuthModal';
+import type { SimpleBlogPost } from '@/services/simpleBlogService';
 import { format } from 'date-fns';
 import { BookOpen, PenTool, AlertCircle, Users, Filter, Lock, LogIn } from 'lucide-react';
 
@@ -32,12 +32,12 @@ const categories = [
 ];
 
 const Blog = () => {
-  const { user } = useSupabaseAuth();
+  const { user } = useSimpleBlogAuth();
   const [selectedCategory, setSelectedCategory] = useState('All Posts');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   
   const { data: posts, isLoading, error } = useQuery({
-    queryKey: ['blogPosts'],
+    queryKey: ['simpleBlogPosts'],
     queryFn: getBlogPosts,
     retry: 2,
     retryDelay: 1000
@@ -195,7 +195,7 @@ const Blog = () => {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {filteredPosts.map((post: BlogPost) => (
+            {filteredPosts.map((post: SimpleBlogPost) => (
               <Card key={post.id} className="overflow-hidden bg-white/80 backdrop-blur-sm border-emerald-200 hover:shadow-lg transition-all duration-300">
                 {post.image && (
                   <div className="h-40 md:h-48 overflow-hidden">
@@ -239,7 +239,7 @@ const Blog = () => {
         )}
       </div>
 
-      <AuthModal 
+      <SimpleBlogAuthModal 
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />

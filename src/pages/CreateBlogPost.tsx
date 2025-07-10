@@ -7,15 +7,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
-import { AuthModal } from '@/components/AuthModal';
-import { createBlogPost } from '@/services/blogService';
+import { useSimpleBlogAuth } from '@/contexts/SimpleBlogAuthContext';
+import { SimpleBlogAuthModal } from '@/components/SimpleBlogAuthModal';
+import { createBlogPost } from '@/services/simpleBlogService';
 import { ArrowLeft, PenTool, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
 const CreateBlogPost = () => {
   const navigate = useNavigate();
-  const { user, isLoading: authLoading } = useSupabaseAuth();
+  const { user, isLoading: authLoading } = useSimpleBlogAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -66,7 +66,7 @@ const CreateBlogPost = () => {
       title: formData.title.trim(),
       content: formData.content.trim(),
       author: user.id,
-      authorName: user.user_metadata?.username || user.email?.split('@')[0] || 'Anonymous',
+      authorName: user.name,
       image: formData.image.trim() || undefined,
       tags: tagsArray.length > 0 ? tagsArray : undefined
     });
@@ -127,7 +127,7 @@ const CreateBlogPost = () => {
             </CardContent>
           </Card>
           
-          <AuthModal 
+          <SimpleBlogAuthModal 
             isOpen={isAuthModalOpen}
             onClose={handleAuthModalClose}
             onAuthSuccess={handleAuthSuccess}
