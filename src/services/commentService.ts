@@ -51,14 +51,15 @@ export const createBlogComment = async (commentData: Partial<BlogComment>) => {
 
     if (error) throw error;
 
+    const result: any = data;
     return {
-      id: data.id,
-      blog_post_id: data.blog_post_id,
-      user_id: data.user_id,
-      user_name: data.user_name,
-      content: data.content,
-      created_at: data.created_at,
-      updated_at: data.updated_at
+      id: result.id,
+      blog_post_id: result.blog_post_id,
+      user_id: result.user_id,
+      user_name: result.user_name,
+      content: result.content,
+      created_at: result.created_at,
+      updated_at: result.updated_at
     };
   } catch (error) {
     console.error('Error creating blog comment:', error);
@@ -79,14 +80,15 @@ export const updateBlogComment = async (id: string, commentData: Partial<BlogCom
 
     if (error) throw error;
 
+    const result: any = data;
     return {
-      id: data.id,
-      blog_post_id: data.blog_post_id,
-      user_id: data.user_id,
-      user_name: data.user_name,
-      content: data.content,
-      created_at: data.created_at,
-      updated_at: data.updated_at
+      id: result.id,
+      blog_post_id: result.blog_post_id,
+      user_id: result.user_id,
+      user_name: result.user_name,
+      content: result.content,
+      created_at: result.created_at,
+      updated_at: result.updated_at
     };
   } catch (error) {
     console.error('Error updating blog comment:', error);
