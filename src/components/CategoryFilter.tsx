@@ -1,38 +1,36 @@
 
 import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { categories } from '@/data/items';
 
 interface CategoryFilterProps {
-  categories: string[];
   selectedCategory: string;
-  onCategoryChange: (category: string) => void;
+  onSelectCategory: (category: string) => void;
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({
-  categories,
-  selectedCategory,
-  onCategoryChange,
-}) => {
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ selectedCategory, onSelectCategory }) => {
   return (
-    <div className="flex items-center gap-2 w-full sm:w-auto">
-      <Filter className="h-4 w-4 text-gray-600 flex-shrink-0" />
-      <Select value={selectedCategory} onValueChange={onCategoryChange}>
-        <SelectTrigger className="w-full sm:w-[200px] border-emerald-200 focus:border-emerald-500 bg-white">
-          <SelectValue placeholder="Select category" />
-        </SelectTrigger>
-        <SelectContent className="bg-white border-emerald-200 z-50">
+    <div className="my-6">
+      <h2 className="text-lg font-semibold mb-3">Categories</h2>
+      <ScrollArea className="whitespace-nowrap pb-4 max-w-full">
+        <div className="flex space-x-2">
           {categories.map((category) => (
-            <SelectItem 
-              key={category} 
-              value={category} 
-              className="hover:bg-emerald-50 focus:bg-emerald-50"
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              className={
+                selectedCategory === category 
+                  ? "bg-marketplace-primary hover:bg-marketplace-dark" 
+                  : "hover:bg-marketplace-light hover:text-marketplace-primary"
+              }
+              onClick={() => onSelectCategory(category)}
             >
               {category}
-            </SelectItem>
+            </Button>
           ))}
-        </SelectContent>
-      </Select>
+        </div>
+      </ScrollArea>
     </div>
   );
 };

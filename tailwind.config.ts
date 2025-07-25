@@ -58,9 +58,7 @@ export default {
 					secondary: '#38BDF8',
 					accent: '#059669',
 					light: '#EFF6FF',
-					dark: '#1E3A8A',
-					green: '#2B5E0E',
-					yellow: '#F2B705'
+					dark: '#1E3A8A'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
